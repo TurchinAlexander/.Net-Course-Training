@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NET1.A._2018.Turchin._01
+namespace Sorts
 {
     /// <summary>
     /// Represent the class, which contains Merge and Quick sort algorithms.

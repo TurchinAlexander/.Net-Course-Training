@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace NET1.A._2018.Turchin._01.Tests
+namespace Sorts.Tests
 {
     [TestClass]
     public class SortClassTests
