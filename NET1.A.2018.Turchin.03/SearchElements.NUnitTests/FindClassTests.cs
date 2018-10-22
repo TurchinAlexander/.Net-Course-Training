@@ -20,19 +20,28 @@ namespace SearchElements.nUnitTests
 			Assert.AreEqual(expected, actual, accuracy);
 		}
 
-		[TestCase(12, ExpectedResult = 21)]
-		[TestCase(513, ExpectedResult = 531)]
-		[TestCase(2017, ExpectedResult = 2071)]
-		[TestCase(414, ExpectedResult = 441)]
-		[TestCase(144, ExpectedResult = 414)]
-		[TestCase(1234321, ExpectedResult = 1241233)]
-		[TestCase(1234126, ExpectedResult = 1234162)]
-		[TestCase(3456432, ExpectedResult = 3462345)]
-		[TestCase(10, ExpectedResult = -1)]
-		[TestCase(20, ExpectedResult = -1)]
-		public int NextBiggerNumberTest(int number)
+		[TestCase(12, 21)]
+		[TestCase(513, 531)]
+		[TestCase(2017, 2071)]
+		[TestCase(414, 441)]
+		[TestCase(144, 414)]
+		[TestCase(1234321, 1241233)]
+		[TestCase(1234126, 1234162)]
+		[TestCase(3456432, 3462345)]
+		public void NextBiggerNumberTest(int number, int expected)
 		{
-			return Find.NextBiggerNumber(number);
+			int? result = Find.NextBiggerNumber(number);
+
+			Assert.AreEqual(expected, result.Value);
+		}
+
+		[TestCase(321)]
+		[TestCase(987654321)]
+		public void NextBiggerNumberMethod_BadInteger_ReturnNull(int number)
+		{
+			int? result = Find.NextBiggerNumber(number);
+
+			Assert.IsFalse(result.HasValue);
 		}
 	}
 }

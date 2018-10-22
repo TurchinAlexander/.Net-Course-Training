@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace NET1.A._2018.Turchin._04
 {
@@ -20,6 +17,76 @@ namespace NET1.A._2018.Turchin._04
 		private delegate int LogicGCD(int a, int b);
 
 		/// <summary>
+		/// Euclidean method for two parameters.
+		/// </summary>
+		/// <param name="a">First parameter.</param>
+		/// <param name="b">Second parameter.</param>
+		/// <returns>The greatest common divisor of two parameters.</returns>
+		public static int Euclidean(int a, int b)
+		{
+			return LogicEuclidean(a, b);
+		}
+
+		/// <summary>
+		/// Euclidean method for two parameters.
+		/// </summary>
+		/// <param name="timeMilliseconds">The execution time.</param>
+		/// <param name="a">First parameter.</param>
+		/// <param name="b">Second parameter.</param>
+		/// <returns>The greatest common divisor of two parameters</returns>
+		public static int Euclidean(out long timeMilliseconds, int a, int b)
+		{
+			Stopwatch watch = Stopwatch.StartNew();
+
+			int result = LogicEuclidean(a, b);
+
+			watch.Stop();
+
+			timeMilliseconds = watch.ElapsedMilliseconds;
+
+			return result;
+		}
+
+		/// <summary>
+		/// Euclidean method for three parameters.
+		/// </summary>
+		/// <param name="a">First parameter.</param>
+		/// <param name="b">Second parameter.</param>
+		/// <param name="c">Third parameter.</param>
+		/// <returns>The greatest common divisor of three parameters.</returns>
+		public static int Euclidean(int a, int b, int c)
+		{
+			return LogicEuclidean (
+				a,
+				LogicEuclidean(b, c)
+				);
+		}
+
+		/// <summary>
+		/// Euclidean method for three parameters.
+		/// </summary>
+		/// <param name="timeMilliseconds">The execution time.</param>
+		/// <param name="a">First parameter.</param>
+		/// <param name="b">Second parameter.</param>
+		/// <param name="c">Third parameter.</param>
+		/// <returns>The greatest common divisor of three parameters.</returns>
+		public static int Euclidean(out long timeMilliseconds, int a, int b, int c)
+		{
+			Stopwatch watch = Stopwatch.StartNew();
+
+			int result = LogicEuclidean(
+				a,
+				LogicEuclidean(b, c)
+				);
+
+			watch.Stop();
+
+			timeMilliseconds = watch.ElapsedMilliseconds;
+
+			return result;
+		}
+
+		/// <summary>
 		/// Represents the Euclidean algorithm to find GCD of values.
 		/// </summary>
 		/// <param name="array">The array of values.</param>
@@ -32,6 +99,96 @@ namespace NET1.A._2018.Turchin._04
 		}
 
 		/// <summary>
+		/// Represents the Euclidean algorithm to find GCD of values.
+		/// </summary>
+		/// <param name="timeMilliseconds">The execution time.</param>
+		/// <param name="array">The array of values.</param>
+		/// <returns>The greatest common divisor.</returns>
+		public static int Euclidean(out long timeMilliseconds, params int[] array)
+		{
+			Stopwatch watch = Stopwatch.StartNew();
+			LogicGCD logic = new LogicGCD(LogicEuclidean);
+
+			int result = HiddenGCD(array, logic);
+
+			watch.Stop();
+
+			timeMilliseconds = watch.ElapsedMilliseconds;
+
+			return result;
+		}
+
+		/// <summary>
+		/// Binary method for two parameters.
+		/// </summary>
+		/// <param name="a">First parameter.</param>
+		/// <param name="b">Second parameter.</param>
+		/// <returns>The greatest common divisor of two parameters.</returns>
+		public static int Binary(int a, int b)
+		{
+			return LogicBinary(a, b);
+		}
+
+		/// <summary>
+		/// Binary method for two parameters.
+		/// </summary>
+		/// <param name="timeMilliseconds">The execution time.</param>
+		/// <param name="a">First parameter.</param>
+		/// <param name="b">Second parameter.</param>
+		/// <returns>The greatest common divisor of two parameters</returns>
+		public static int Binary(out long timeMilliseconds, int a, int b)
+		{
+			Stopwatch watch = Stopwatch.StartNew();
+
+			int result = LogicBinary(a, b);
+
+			watch.Stop();
+
+			timeMilliseconds = watch.ElapsedMilliseconds;
+
+			return result;
+		}
+
+		/// <summary>
+		/// Binary method for three parameters.
+		/// </summary>
+		/// <param name="a">First parameter.</param>
+		/// <param name="b">Second parameter.</param>
+		/// <param name="c">Third parameter.</param>
+		/// <returns>The greatest common divisor of three parameters.</returns>
+		public static int Binary(int a, int b, int c)
+		{
+			return LogicBinary(
+				a,
+				LogicBinary(b, c)
+				);
+		}
+
+		/// <summary>
+		/// Binary method for three parameters.
+		/// </summary>
+		/// <param name="timeMilliseconds">The execution time.</param>
+		/// <param name="a">First parameter.</param>
+		/// <param name="b">Second parameter.</param>
+		/// <param name="c">Third parameter.</param>
+		/// <returns>The greatest common divisor of three parameters.</returns>
+		public static int Binary(out long timeMilliseconds, int a, int b, int c)
+		{
+			Stopwatch watch = Stopwatch.StartNew();
+
+			int result = LogicBinary(
+				a,
+				LogicBinary(b, c)
+				);
+
+			watch.Stop();
+
+			timeMilliseconds = watch.ElapsedMilliseconds;
+
+			return result;
+		}
+
+		/// <summary>
 		/// Represents the Binary algorithm to find GCD of values.
 		/// </summary>
 		/// <param name="array">The array of values.</param>
@@ -41,6 +198,26 @@ namespace NET1.A._2018.Turchin._04
 			LogicGCD logic = new LogicGCD(LogicBinary);
 
 			return HiddenGCD(array, logic);
+		}
+
+		/// <summary>
+		/// Represents the Binary algorithm to find GCD of values.
+		/// </summary>
+		/// <param name="timeMilliseconds">The execution time.</param>
+		/// <param name="array">The array of values.</param>
+		/// <returns>The greatest common divisor.</returns>
+		public static int Binary(out long timeMilliseconds, params int[] array)
+		{
+			Stopwatch watch = Stopwatch.StartNew();
+			LogicGCD logic = new LogicGCD(LogicBinary);
+
+			int result = HiddenGCD(array, logic);
+
+			watch.Stop();
+
+			timeMilliseconds = watch.ElapsedMilliseconds;
+
+			return result;
 		}
 
 		/// <summary>

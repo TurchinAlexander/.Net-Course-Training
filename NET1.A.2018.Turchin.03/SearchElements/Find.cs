@@ -22,18 +22,18 @@ namespace SearchElements
 
 			CheckConditions.NthRoot(number, power, accuracy);
 
-			double x0, x1 = 1;
+			double prevResult, currentResult = 1;
 
 			do
 			{
-				x0 = x1;
+				prevResult = currentResult;
 
-				x1 = ((power - 1) * x0 + DivideWithArgumentInPower(number, x0, power - 1));
-				x1 /= power;
+				currentResult = ((power - 1) * prevResult + DivideWithArgumentInPower(number, prevResult, power - 1));
+				currentResult /= power;
 			}
-			while (Math.Abs(x0 - x1) > accuracy);
+			while (Math.Abs(prevResult - currentResult) > accuracy);
 
-			return x1;
+			return currentResult;
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace SearchElements
 		/// </summary>
 		/// <param name="number">The value, which what we should seek.</param>
 		/// <returns>The value, if we find it. Otherwise -1.</returns>
-		public static int NextBiggerNumber(int number)
+		public static int? NextBiggerNumber(int number)
 		{
 			if (number < 10)
 			{
@@ -81,7 +81,9 @@ namespace SearchElements
 				}
 			}
 
-			return (found) ? temp.ToInt() : -1;
+			return (found) 
+				? (int?)temp.ToInt() 
+				: null;
 		}
 
 		private static void Swap(ref int a, ref int b)

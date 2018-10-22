@@ -49,9 +49,19 @@ namespace SearchElements.Tests
 			int number = Convert.ToInt32(TestContext.DataRow["number"]);
 			int expected = Convert.ToInt32(TestContext.DataRow["ExpectedResult"]);
 
-			double result = Find.NextBiggerNumber(number);
+			int? result = Find.NextBiggerNumber(number);
 
-			Assert.AreEqual(expected, result);
+			Assert.AreEqual(expected, result.Value);
+		}
+
+		[TestMethod]
+		public void NextBiggerNumber_BadInteger_ReturnNull()
+		{
+			int number = 321;
+
+			int? result = Find.NextBiggerNumber(number);
+
+			Assert.IsFalse(result.HasValue);
 		}
 	}
 }

@@ -5,7 +5,7 @@ namespace NET1.A._2018.Turchin._04.Tests
 	[TestFixture]
 	public class CalculateClassTests
 	{
-		private static object[] Test =
+		private static object[] TestVerbal =
 		{
 			new object[] 
 			{
@@ -16,10 +16,75 @@ namespace NET1.A._2018.Turchin._04.Tests
 			{
 				new double[] {-23.809, 0.295, 15.17 },
 				new string[] { "minus two three point eight zero nine", "zero point two nine five", "one five point one seven" }
+			},
+			new object[]
+			{
+				new double[] {double.NaN, double.PositiveInfinity, double.NegativeInfinity },
+				new string[] { "Nan", "Positive Infinite", "Negative Infinite" }
+			},
+
+		};
+
+		private static object[] TestBinary =
+		{
+			new object[]
+			{
+				-255.255,
+				"1100000001101111111010000010100011110101110000101000111101011100"
+			},
+			new object[]
+			{
+				255.255,
+				"0100000001101111111010000010100011110101110000101000111101011100"
+			},
+			new object[]
+			{
+				4294967295.0,
+				"0100000111101111111111111111111111111111111000000000000000000000"
+			},
+			new object[]
+			{
+				double.MinValue,
+				"1111111111101111111111111111111111111111111111111111111111111111"
+			},
+			new object[]
+			{
+				double.MaxValue,
+				"0111111111101111111111111111111111111111111111111111111111111111"
+			},
+			new object[]
+			{
+				double.Epsilon,
+				"0000000000000000000000000000000000000000000000000000000000000001"
+			},
+			new object[]
+			{
+				double.NaN,
+				"1111111111111000000000000000000000000000000000000000000000000000"
+			},
+			new object[]
+			{
+				double.NegativeInfinity,
+				"1111111111110000000000000000000000000000000000000000000000000000"
+			},
+			new object[]
+			{
+				double.PositiveInfinity,
+				"0111111111110000000000000000000000000000000000000000000000000000"
+			},
+			new object[]
+			{
+				-0.0,
+				"1000000000000000000000000000000000000000000000000000000000000000"
+			},
+			new object[]
+			{
+				0.0,
+				"0000000000000000000000000000000000000000000000000000000000000000"
 			}
 		};
 
-		[TestCaseSource("Test")]
+		[TestCaseSource("TestVerbal")]
 		public void TransformToWordsMethod_DoubleArray_ReturnStringArray(double[] array, string[] expected)
 		{
 			string[] result = Calculate.TransformToWords(array);
@@ -27,31 +92,12 @@ namespace NET1.A._2018.Turchin._04.Tests
 			Assert.IsTrue(Execute.CheckStringArrays(expected, result));
 		}
 
-		[TestCase(-255.255, ExpectedResult =
-			"1100000001101111111010000010100011110101110000101000111101011100")]
-		[TestCase(255.255, ExpectedResult =
-			"0100000001101111111010000010100011110101110000101000111101011100")]
-		[TestCase(4294967295.0, ExpectedResult =
-			"0100000111101111111111111111111111111111111000000000000000000000")]
-		[TestCase(double.MinValue, ExpectedResult =
-			"1111111111101111111111111111111111111111111111111111111111111111")]
-		[TestCase(double.MaxValue, ExpectedResult = 
-			"0111111111101111111111111111111111111111111111111111111111111111")]
-		[TestCase(double.Epsilon, ExpectedResult =
-			"0000000000000000000000000000000000000000000000000000000000000001")]
-		[TestCase(double.NaN, ExpectedResult =
-			"1111111111111000000000000000000000000000000000000000000000000000")]
-		[TestCase(double.NegativeInfinity, ExpectedResult =
-			"1111111111110000000000000000000000000000000000000000000000000000")]
-		[TestCase(double.PositiveInfinity, ExpectedResult =
-			"0111111111110000000000000000000000000000000000000000000000000000")]
-		[TestCase(-0.0, ExpectedResult =
-			"1000000000000000000000000000000000000000000000000000000000000000")]
-		[TestCase(0.0, ExpectedResult =
-			"0000000000000000000000000000000000000000000000000000000000000000")]
-		public string DoubleToBinMethod_Double_StringDoubleInBin(double number)
+		[TestCaseSource("TestBinary")]
+		public void DoubleToBinMethod_Double_StringDoubleInBin(double number, string expected)
 		{
-			return number.ToBinary();
+			string result = number.ToBinary();
+
+			Assert.IsTrue(expected.Equals(result));
 		}
 	}
 

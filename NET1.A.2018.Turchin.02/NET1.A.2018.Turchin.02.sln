@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkWithBits", "WorkWithBit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkWithBits.Tests", "WorkWithBits.Tests\WorkWithBits.Tests.csproj", "{1069A0C4-553B-4EDC-87E2-9A31B5B44F4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkWithBits.NUnitTests", "WorkWithBits.NUnit\WorkWithBits.NUnitTests.csproj", "{B95A5114-8A5E-4634-B06B-3BA2385321BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkWithBits.NUnitTests", "WorkWithBits.NUnitTests\WorkWithBits.NUnitTests.csproj", "{B95A5114-8A5E-4634-B06B-3BA2385321BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
