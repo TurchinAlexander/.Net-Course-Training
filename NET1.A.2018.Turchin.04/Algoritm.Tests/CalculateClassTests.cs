@@ -5,14 +5,38 @@ namespace NET1.A._2018.Turchin._04.Tests
 	[TestFixture]
 	public class CalculateClassTests
 	{
+		[TestCaseSource("TestVerbal")]
+		public void TransformToWordsMethod_DoubleArray_ReturnStringArray(double[] array, string[] expected)
+		{
+			string[] result = Calculate.TransformToWords(array);
+
+			Assert.IsTrue(Execute.CheckStringArrays(expected, result));
+		}
+
+		[TestCaseSource("TestBinary")]
+		public void DoubleToBinMethod_Double_StringDoubleInBin(double number, string expected)
+		{
+			string result = number.ToBinary();
+
+			Assert.IsTrue(expected.Equals(result));
+		}
+
+		[TestCaseSource("TestToBinary")]
+		public void TransformToBinary_DoubleArray_ReturnStringArray(double[] array, string[] expected)
+		{
+			string[] result = Calculate.TransformToBinary(array);
+
+			Assert.IsTrue(Execute.CheckStringArrays(expected, result));
+		}
+
 		private static object[] TestVerbal =
 		{
-			new object[] 
+			new object[]
 			{
 				new double[] { 0 },
 				new string[] { "zero" }
 			},
-			new object[] 
+			new object[]
 			{
 				new double[] {-23.809, 0.295, 15.17 },
 				new string[] { "minus two three point eight zero nine", "zero point two nine five", "one five point one seven" }
@@ -20,7 +44,7 @@ namespace NET1.A._2018.Turchin._04.Tests
 			new object[]
 			{
 				new double[] {double.NaN, double.PositiveInfinity, double.NegativeInfinity },
-				new string[] { "Nan", "Positive Infinite", "Negative Infinite" }
+				new string[] { "NaN", "Positive Infinite", "Negative Infinite" }
 			},
 
 		};
@@ -84,21 +108,24 @@ namespace NET1.A._2018.Turchin._04.Tests
 			}
 		};
 
-		[TestCaseSource("TestVerbal")]
-		public void TransformToWordsMethod_DoubleArray_ReturnStringArray(double[] array, string[] expected)
+		private static object[] TestToBinary =
 		{
-			string[] result = Calculate.TransformToWords(array);
-
-			Assert.IsTrue(Execute.CheckStringArrays(expected, result));
-		}
-
-		[TestCaseSource("TestBinary")]
-		public void DoubleToBinMethod_Double_StringDoubleInBin(double number, string expected)
-		{
-			string result = number.ToBinary();
-
-			Assert.IsTrue(expected.Equals(result));
-		}
+			new object[]
+			{
+				new double[]
+				{
+					-255.255,
+					255.255,
+					4294967295.0,
+				},
+				new string[]
+				{
+					"1100000001101111111010000010100011110101110000101000111101011100",
+					"0100000001101111111010000010100011110101110000101000111101011100",
+					"0100000111101111111111111111111111111111111000000000000000000000"
+				}
+			}
+		};
 	}
 
 	class Execute

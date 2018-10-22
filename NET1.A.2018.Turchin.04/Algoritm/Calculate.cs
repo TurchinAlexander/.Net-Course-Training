@@ -57,6 +57,23 @@ namespace NET1.A._2018.Turchin._04
 		}
 
 		/// <summary>
+		/// Converts real numbers to binary representation.
+		/// </summary>
+		/// <param name="array">Array of <see cref="double"/>.</param>
+		/// <returns>The array of <see cref="string"/>.</returns>
+		public static string[] TransformToBinary(double[] array)
+		{
+			string[] result = new string[array.Length];
+
+			for (int i = 0; i < array.Length; i++)
+			{
+				result[i] = ToBinary(array[i]);
+			}
+
+			return result;
+		}
+
+		/// <summary>
 		/// Convert a <see cref="double"/> to binary representation.
 		/// </summary>
 		/// <param name="number">The <see cref="double"/>.</param>
