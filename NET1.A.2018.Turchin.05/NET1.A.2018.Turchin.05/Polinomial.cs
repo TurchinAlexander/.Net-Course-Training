@@ -154,5 +154,28 @@ namespace NET1.A._2018.Turchin._05
 			return new Polinomial(resultArray);
 		}
 
+		public static bool operator ==(Polinomial a, Polinomial b)
+		{
+			if (a.values.Length != b.values.Length)
+			{
+				return false;
+			}
+
+			bool isEqual = true;
+			const double precision = 0.01;
+			int i = 0;
+
+			while ((i < a.values.Length) && isEqual)
+			{
+				isEqual = (Math.Abs(a.values[i] - b.values[i]) < precision);
+			}
+
+			return isEqual;
+		}
+
+		public static bool operator != (Polinomial a, Polinomial b)
+		{
+			return !(a == b);
+		}
     }
 }
