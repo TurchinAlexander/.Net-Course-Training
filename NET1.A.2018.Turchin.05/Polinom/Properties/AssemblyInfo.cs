@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NET1.A.2018.Turchin.05")]
+[assembly: AssemblyTitle("Polinom")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NET1.A.2018.Turchin.05")]
+[assembly: AssemblyProduct("Polinom")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("20bbe10a-55eb-4802-b7f3-6f31c815bb2d")]
+[assembly: Guid("43adfff6-c491-4281-be2d-47e89e6f3ab8")]
 
 // Version information for an assembly consists of the following four values:
 //

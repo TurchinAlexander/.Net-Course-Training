@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NET1.A._2018.Turchin._05
+namespace Polinom
 {
     public class Polinomial
     {
@@ -78,23 +78,32 @@ namespace NET1.A._2018.Turchin._05
 		/// <returns>The result of substraction of two polinomials</returns>
 		public static Polinomial operator -(Polinomial a, Polinomial b)
 		{
+			double[] smallArray, bigArray;
 			double[] resultArray;
-			int minLength;
+
+			ChangeSign(b.values);
 
 			if (a.values.Length < b.values.Length)
 			{
-				resultArray = new double[b.values.Length];
-				minLength = a.values.Length;
+				smallArray = a.values;
+				bigArray = b.values;
 			}
 			else
 			{
-				resultArray = new double[a.values.Length];
-				minLength = b.values.Length;
+				smallArray = b.values;
+				bigArray = a.values;
 			}
 
-			for (int i = 0; i < minLength; i++)
+			resultArray = new double[bigArray.Length];
+
+			for (int i = 0; i < smallArray.Length; i++)
 			{
-				resultArray[i] = a.values[i] - b.values[i];
+				resultArray[i] = smallArray[i] + bigArray[i];
+			}
+
+			for(int i = smallArray.Length; i < bigArray.Length; i++)
+			{
+				resultArray[i] = bigArray[i];
 			}
 
 			return new Polinomial(resultArray);
@@ -121,7 +130,7 @@ namespace NET1.A._2018.Turchin._05
 		/// <returns>The result of multiply of two polinomials</returns>
 		public static Polinomial operator *(Polinomial a, Polinomial b)
 		{
-			double[] resultArray = new double[a.values.Length + b.values.Length];
+			double[] resultArray = new double[a.values.Length + b.values.Length - 1];
 
 			for (int i = 0; i < a.values.Length; i++)
 				for (int j = 0; j < b.values.Length; j++)
@@ -214,13 +223,18 @@ namespace NET1.A._2018.Turchin._05
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 
-			for (int i = 0; i < this.values.Length; i++)
+			for (int i = this.values.Length - 1; i > 1; i--)
 			{
-				stringBuilder.AppendFormat("{0} ", this.values[i]);
+				stringBuilder.AppendFormat("{0}x^{1} + ", this.values[i], i);
+			}
+			
+			if (values.Length >= 2)
+			{
+				stringBuilder.AppendFormat("{0}x + ", this.values[1]);
 			}
 
-			stringBuilder.Length--;
-
+			stringBuilder.AppendFormat("{0}", this.values[0]);
+			
 			return stringBuilder.ToString();
 		}
 
@@ -244,9 +258,18 @@ namespace NET1.A._2018.Turchin._05
 			while ((i < firstArray.Length) && isEqual)
 			{
 				isEqual = (Math.Abs(firstArray[i] - secondArray[i]) < precision);
+				i++;
 			}
 
 			return isEqual;
+		}
+
+		private static void ChangeSign(double[] array)
+		{
+			for (int i = 0; i < array.Length; i++)
+			{
+				array[i] = -array[i];
+			}
 		}
 	}
 }
