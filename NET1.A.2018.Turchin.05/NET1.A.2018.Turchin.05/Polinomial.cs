@@ -35,25 +35,23 @@ namespace NET1.A._2018.Turchin._05
 		/// <returns>The result of sum of two polinomials</returns>
 		public static Polinomial operator +(Polinomial a, Polinomial b)
 		{
-			double[] bigArray, smallArray;
 			double[] resultArray;
+			int minLength;
 
 			if (a.values.Length < b.values.Length)
 			{
-				bigArray = b.values;
-				smallArray = a.values;
+				resultArray = new double[b.values.Length];
+				minLength = a.values.Length;
 			}
 			else
 			{
-				bigArray = a.values;
-				smallArray = b.values;
+				resultArray = new double[a.values.Length];
+				minLength = b.values.Length;
 			}
 
-			resultArray = new double[bigArray.Length];
-
-			for (int i = 0; i < smallArray.Length; i++)
+			for (int i = 0; i < minLength; i++)
 			{
-				resultArray[i] = smallArray[i] + bigArray[i];
+				resultArray[i] = a.values[i] + b.values[i];
 			}
 
 			return new Polinomial(resultArray);
@@ -80,25 +78,23 @@ namespace NET1.A._2018.Turchin._05
 		/// <returns>The result of substraction of two polinomials</returns>
 		public static Polinomial operator -(Polinomial a, Polinomial b)
 		{
-			double[] bigArray, smallArray;
 			double[] resultArray;
+			int minLength;
 
 			if (a.values.Length < b.values.Length)
 			{
-				bigArray = b.values;
-				smallArray = a.values;
+				resultArray = new double[b.values.Length];
+				minLength = a.values.Length;
 			}
 			else
 			{
-				bigArray = a.values;
-				smallArray = b.values;
+				resultArray = new double[a.values.Length];
+				minLength = b.values.Length;
 			}
 
-			resultArray = new double[bigArray.Length];
-
-			for (int i = 0; i < smallArray.Length; i++)
+			for (int i = 0; i < minLength; i++)
 			{
-				resultArray[i] = smallArray[i] - bigArray[i];
+				resultArray[i] = a.values[i] - b.values[i];
 			}
 
 			return new Polinomial(resultArray);
@@ -154,9 +150,89 @@ namespace NET1.A._2018.Turchin._05
 			return new Polinomial(resultArray);
 		}
 
+		/// <summary>
+		/// Check if two polimomials have the same coefficients.
+		/// </summary>
+		/// <param name="a">First parameter.</param>
+		/// <param name="b">Second parameter.</param>
+		/// <returns><c>true</c> if they have the same coefficients. Otherwise <c>falseW</c></returns>
 		public static bool operator ==(Polinomial a, Polinomial b)
 		{
-			if (a.values.Length != b.values.Length)
+			return CheckValues(a.values, b.values);
+		}
+
+		/// <summary>
+		/// Check if two polimomials have the different coefficients.
+		/// </summary>
+		/// <param name="a">First parameter.</param>
+		/// <param name="b">Second parameter.</param>
+		/// <returns></returns>
+		public static bool operator !=(Polinomial a, Polinomial b)
+		{
+			return !(a == b);
+		}
+
+		/// <summary>
+		/// Determines whether the specified object is equal to current object
+		/// </summary>
+		/// <param name="obj">The object to be compared.</param>
+		/// <returns><c>true</c>If equals. Otherwise <c>false</c></returns>
+		public override bool Equals(object obj)
+		{
+			if (obj.GetType() != this.GetType()) return false;
+
+			Polinomial other = (Polinomial)obj;
+			return CheckValues(this.values, other.values);
+		}
+
+		/// <summary>
+		/// Gets hash of the intance.
+		/// </summary>
+		/// <returns>Hash code of the intance.</returns>
+		public override int GetHashCode()
+		{
+			const int intSize = 32;
+			double sumValues = 0;
+
+			for (int i = 0; i < values.Length; i++)
+			{
+				sumValues += values[i];
+			}
+
+			long longtemp = (long)sumValues;
+			int intPart2 = (int)longtemp;
+			int intPart1 = (int)longtemp >> intSize;
+
+			return (intPart1 ^ intPart2) + values.Length;
+		}
+
+		/// <summary>
+		/// Converts the value of the instance to <see cref="string"/>.
+		/// </summary>
+		/// <returns>The <see cref="string"/>.</returns>
+		public override string ToString()
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+
+			for (int i = 0; i < this.values.Length; i++)
+			{
+				stringBuilder.AppendFormat("{0} ", this.values[i]);
+			}
+
+			stringBuilder.Length--;
+
+			return stringBuilder.ToString();
+		}
+
+		/// <summary>
+		/// Check if two array have the same values.
+		/// </summary>
+		/// <param name="firstArray">First array.</param>
+		/// <param name="secondArray">Second array.</param>
+		/// <returns><c>true</c>if equals. Otherwise <c>false</c>.</returns>
+		private static bool CheckValues(double[] firstArray, double[] secondArray)
+		{
+			if (firstArray.Length != secondArray.Length)
 			{
 				return false;
 			}
@@ -165,17 +241,12 @@ namespace NET1.A._2018.Turchin._05
 			const double precision = 0.01;
 			int i = 0;
 
-			while ((i < a.values.Length) && isEqual)
+			while ((i < firstArray.Length) && isEqual)
 			{
-				isEqual = (Math.Abs(a.values[i] - b.values[i]) < precision);
+				isEqual = (Math.Abs(firstArray[i] - secondArray[i]) < precision);
 			}
 
 			return isEqual;
 		}
-
-		public static bool operator != (Polinomial a, Polinomial b)
-		{
-			return !(a == b);
-		}
-    }
+	}
 }
