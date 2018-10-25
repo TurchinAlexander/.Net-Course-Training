@@ -33,6 +33,8 @@ namespace JaggedArray
 		/// <param name="array">Input array.</param>
 		/// <param name="compare">What we sort by.</param>
 		/// <param name="typeSort">Type of sort.</param>
+		/// <exception cref="ArgumentNullException">If array or one of the elements of subarray is null.</exception>
+		/// <exception cref="ArithmeticException">If array or one of the elements of subarray has zero length.</exception>
 		public static void Execute(int[][] array, CompareBy compare, TypeSort typeSort)
 		{
 			CheckArguments(array);
@@ -40,7 +42,17 @@ namespace JaggedArray
 			int[] keyValues = new int[array.Length];
 
 			FindKeyValues(keyValues, array, compare);
+			SortJaggedArray(keyValues, array, typeSort);
+		}
 
+		/// <summary>
+		/// Sort jagged array due condition.
+		/// </summary>
+		/// <param name="keyValues">Key values of jagged array.</param>
+		/// <param name="array">Jagged array.</param>
+		/// <param name="typeSort">The condition.</param>
+		private static void SortJaggedArray(int[] keyValues, int[][] array, TypeSort typeSort)
+		{
 			for (int i = 0; i < keyValues.Length - 1; i++)
 				for (int j = 0; j < keyValues.Length - i - 1; j++)
 				{
@@ -90,6 +102,8 @@ namespace JaggedArray
 		/// Check input arguments for valid.
 		/// </summary>
 		/// <param name="array">Array to check.</param>
+		/// <exception cref="ArgumentNullException">If array or one of the elements of subarray is null.</exception>
+		/// <exception cref="ArithmeticException">If array or one of the elements of subarray has zero length.</exception>
 		private static void CheckArguments(int[][] array)
 		{
 			if (array == null) throw new ArgumentNullException(nameof(array));
