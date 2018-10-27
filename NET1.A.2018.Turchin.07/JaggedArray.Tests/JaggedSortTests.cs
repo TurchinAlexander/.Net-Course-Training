@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using JaggedArray;
+using JaggedArray.Tests.Comparators;
 
 namespace JaggedArray.Tests
 {
@@ -8,19 +8,7 @@ namespace JaggedArray.Tests
     public class JaggedSortTests
     {
 		[Test]
-		public void ExecuteMethod_NullArray_ReturnArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => JaggedSort.Execute(null, JaggedSort.CompareBy.Sum, JaggedSort.TypeSort.Ascending));
-		}
-
-		[Test]
-		public void ExecuteMethod_EmptyArray_ReturnArgumentException()
-		{
-			Assert.Throws<ArgumentException>(() => JaggedSort.Execute(new int[][] { }, JaggedSort.CompareBy.Sum, JaggedSort.TypeSort.Ascending));
-		}
-
-		[Test]
-		public void ExecuteMethod_ArrayWithNullElements_ReturnArgumentNullException()
+		public void ExecuteMethod_ArrayWithNullElements_ReturnSortedArray()
 		{
 			int[][] array = new int[][]
 			{
@@ -29,20 +17,62 @@ namespace JaggedArray.Tests
 				new int[] {5, 6, 7 }
 			};
 
-			Assert.Throws<ArgumentNullException>(() => JaggedSort.Execute(array, JaggedSort.CompareBy.Sum, JaggedSort.TypeSort.Ascending));
+			int[][] expected = new int[][]
+			{
+				null,
+				new int[] { 1, 2, 3 },
+				new int[] { 5, 6, 7 }
+			};
+
+			JaggedSort.Execute(array, new ComparatorSumAscend());
+
+			Assert.IsTrue(CheckJaggedArrays(expected, array));
 		}
 
 		[Test]
-		public void ExecuteMethod_ArrayWithEmptyElements_ReturnArgumentException()
+		public void ExecuteMethod_ArrayWithEmptyElements_ReturnSortedArray()
 		{
 			int[][] array = new int[][]
 			{
 				new int[] { 1, 2, 3 },
 				new int[] { },
-				new int[] {5, 6, 7 }
+				new int[] { 5, 6, 7 }
 			};
 
-			Assert.Throws<ArgumentException>(() => JaggedSort.Execute(array, JaggedSort.CompareBy.Sum, JaggedSort.TypeSort.Ascending));
+			int[][] expected = new int[][]
+			{
+				new int[] { 5, 6, 7 },
+				new int[] { 1, 2, 3 },
+				new int[] { }
+			};
+
+			JaggedSort.Execute(array, new ComparatorSumDescend());
+
+			Assert.IsTrue(CheckJaggedArrays(expected, array));
+		}
+
+		[Test]
+		public void ExecuteMethod_ArrayWithNullAndEmptyElements_ReturnSortedArray()
+		{
+			int[][] array = new int[][]
+			{
+				new int[] { 1, 2, 3 },
+				new int[] { },
+				null,
+				new int[] { 5, 6, 7 }
+			};
+
+			int[][] expected = new int[][]
+			{
+				new int[] { 5, 6, 7 },
+				new int[] { 1, 2, 3 },
+				new int[] { },
+				null
+			};
+
+			JaggedSort.Execute(array, new ComparatorSumDescend());
+
+			Assert.IsTrue(CheckJaggedArrays(expected, array));
 		}
 
 		[Test]
@@ -62,7 +92,7 @@ namespace JaggedArray.Tests
 				new int[] {5, 6, 7}
 			};
 
-			JaggedSort.Execute(array, JaggedSort.CompareBy.Sum, JaggedSort.TypeSort.Ascending);
+			JaggedSort.Execute(array, new ComparatorSumAscend());
 
 			Assert.IsTrue(CheckJaggedArrays(expected, array));
 		}
@@ -84,7 +114,7 @@ namespace JaggedArray.Tests
 				new int[] {0, 1, 2}
 			};
 
-			JaggedSort.Execute(array, JaggedSort.CompareBy.Sum, JaggedSort.TypeSort.Descending);
+			JaggedSort.Execute(array, new ComparatorSumDescend());
 
 			Assert.IsTrue(CheckJaggedArrays(expected, array));
 		}
@@ -106,7 +136,7 @@ namespace JaggedArray.Tests
 				new int[] {1, 2, 10}
 			};
 
-			JaggedSort.Execute(array, JaggedSort.CompareBy.MaxValue, JaggedSort.TypeSort.Ascending);
+			JaggedSort.Execute(array, new ComparatorMaxValueAscend());
 
 			Assert.IsTrue(CheckJaggedArrays(expected, array));
 		}
@@ -128,7 +158,7 @@ namespace JaggedArray.Tests
 				new int[] {0, 1, 2}
 			};
 
-			JaggedSort.Execute(array, JaggedSort.CompareBy.MaxValue, JaggedSort.TypeSort.Descending);
+			JaggedSort.Execute(array, new ComparatorMaxValueDescend());
 
 			Assert.IsTrue(CheckJaggedArrays(expected, array));
 		}
@@ -150,7 +180,7 @@ namespace JaggedArray.Tests
 				new int[] {5, 6, 7}
 			};
 
-			JaggedSort.Execute(array, JaggedSort.CompareBy.MinValue, JaggedSort.TypeSort.Ascending);
+			JaggedSort.Execute(array, new ComparatorMinValueAscend());
 
 			Assert.IsTrue(CheckJaggedArrays(expected, array));
 		}
@@ -173,7 +203,7 @@ namespace JaggedArray.Tests
 				
 			};
 
-			JaggedSort.Execute(array, JaggedSort.CompareBy.MinValue, JaggedSort.TypeSort.Descending);
+			JaggedSort.Execute(array, new ComparatorMinValueDescend());
 
 			Assert.IsTrue(CheckJaggedArrays(expected, array));
 		}
@@ -182,12 +212,14 @@ namespace JaggedArray.Tests
 		{
 			bool isEqual = true;
 
-			for (int i = 0; (i < expected.Length) && isEqual; i++) 
-				for (int j = 0; (j < expected[i].Length) && isEqual; j++)
+			for (int i = 0; (i < expected.Length) && isEqual; i++)
+			{
+				int arrayLength = (expected[i] == null)? 0 : expected[i].Length;
+				for (int j = 0; (j < arrayLength) && isEqual; j++)
 				{
 					isEqual = (expected[i][j] == actual[i][j]);
 				}
-
+			}
 			return isEqual;
 		}
 	}

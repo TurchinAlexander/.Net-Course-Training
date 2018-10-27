@@ -48,6 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comparators\ComparatorMaxValueAscend.cs" />
+    <Compile Include="Comparators\ComparatorMinValueAscend.cs" />
+    <Compile Include="Comparators\ComparatorMinValueDescend.cs" />
+    <Compile Include="Comparators\ComparatorSumAscend.cs" />
+    <Compile Include="Comparators\ComparatorSumDescend.cs" />
+    <Compile Include="Comparators\ComparatorMaxValueDescend.cs" />
     <Compile Include="JaggedSortTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
