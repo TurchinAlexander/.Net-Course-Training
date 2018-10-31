@@ -89,7 +89,6 @@ namespace Polinom.Tests
 		{
 			Polynomial argument1 = new Polynomial(5, 10, -3);
 			Polynomial argument2 = new Polynomial(5, 10, -3);
-
 			Assert.IsTrue(argument1.Equals(argument2));
 		}
 

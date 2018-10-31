@@ -1,20 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Configuration;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Polinom
 {
 	/// <summary>
 	/// Represent polynomial class.
 	/// </summary>
-	public class Polynomial : ICloneable, IEquatable<Polynomial>
+	public sealed class Polynomial : ICloneable, IEquatable<Polynomial>
 	{
+		public static double epsilon;
 		/// <summary>
 		/// Array of coefficients.
 		/// </summary>
-		private readonly double[] values;
+		private readonly double[] _values;
+
+		/// <summary>
+		/// Gets the maximum power of the polynomial.
+		/// </summary>
+		public int MaxPower { get; }
+
+		/// <summary>
+		/// Indexer to get coefficients of polinomial.
+		/// </summary>
+		/// <param name="number">Degree of polynomial.</param>
+		/// <returns>The value of coefficient.</returns>
+		public double this[int number]
+		{
+			get
+			{
+				if (number > MaxPower)
+					throw new ArgumentOutOfRangeException(nameof(number));
+
+				return _values[number];
+			}
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Polynomial"/> class.
@@ -28,15 +48,10 @@ namespace Polinom
 			if (array.Length == 0) throw new ArgumentException(nameof(array));
 
 			this.MaxPower = array.Length - 1;
-			this.values = new double[array.Length];
+			this._values = new double[array.Length];
 
-			array.CopyTo(this.values, 0);
+			array.CopyTo(this._values, 0);
 		}
-
-		/// <summary>
-		/// Gets the maximum power of the polynomial.
-		/// </summary>
-		public int MaxPower { get; }
 
 		/// <summary>
 		/// Overload sum operation for two polynomials.
@@ -46,26 +61,7 @@ namespace Polinom
 		/// <returns>The result of sum of two polynomials</returns>
 		public static Polynomial operator +(Polynomial a, Polynomial b)
 		{
-			double[] resultArray;
-			int minLength;
-
-			if (a.values.Length < b.values.Length)
-			{
-				resultArray = new double[b.values.Length];
-				minLength = a.values.Length;
-			}
-			else
-			{
-				resultArray = new double[a.values.Length];
-				minLength = b.values.Length;
-			}
-
-			for (int i = 0; i < minLength; i++)
-			{
-				resultArray[i] = a.values[i] + b.values[i];
-			}
-
-			return new Polynomial(resultArray);
+			return Add(a, b);
 		}
 
 		/// <summary>
@@ -76,9 +72,7 @@ namespace Polinom
 		/// <returns>The result of sum</returns>
 		public static Polynomial operator +(Polynomial a, int b)
 		{
-			a.values[0] += b;
-
-			return new Polynomial(a.values);
+			return Add(a, b);
 		}
 
 		/// <summary>
@@ -89,35 +83,7 @@ namespace Polinom
 		/// <returns>The result of subtraction of two polynomials</returns>
 		public static Polynomial operator -(Polynomial a, Polynomial b)
 		{
-			double[] smallArray, bigArray;
-			double[] resultArray;
-
-			ChangeSign(b.values);
-
-			if (a.values.Length < b.values.Length)
-			{
-				smallArray = a.values;
-				bigArray = b.values;
-			}
-			else
-			{
-				smallArray = b.values;
-				bigArray = a.values;
-			}
-
-			resultArray = new double[bigArray.Length];
-
-			for (int i = 0; i < smallArray.Length; i++)
-			{
-				resultArray[i] = smallArray[i] + bigArray[i];
-			}
-
-			for (int i = smallArray.Length; i < bigArray.Length; i++)
-			{
-				resultArray[i] = bigArray[i];
-			}
-
-			return new Polynomial(resultArray);
+			return Subtract(a, b);
 		}
 
 		/// <summary>
@@ -128,9 +94,7 @@ namespace Polinom
 		/// <returns>The result of subtraction.</returns>
 		public static Polynomial operator -(Polynomial a, int b)
 		{
-			a.values[0] -= b;
-
-			return new Polynomial(a.values);
+			return Subtract(a, b);
 		}
 
 		/// <summary>
@@ -141,17 +105,7 @@ namespace Polinom
 		/// <returns>The result of multiply of two polynomials</returns>
 		public static Polynomial operator *(Polynomial a, Polynomial b)
 		{
-			double[] resultArray = new double[a.values.Length + b.values.Length - 1];
-
-			for (int i = 0; i < a.values.Length; i++)
-			{
-				for (int j = 0; j < b.values.Length; j++)
-				{
-					resultArray[i + j] += a.values[i] * b.values[j];
-				}
-			}
-
-			return new Polynomial(resultArray);
+			return Multiply(a, b);
 		}
 
 		/// <summary>
@@ -162,15 +116,9 @@ namespace Polinom
 		/// <returns>The result of multiply.</returns>
 		public static Polynomial operator *(Polynomial a, int b)
 		{
-			double[] resultArray = new double[a.values.Length];
-
-			for (int i = 0; i < a.values.Length; i++)
-			{
-				resultArray[i] = a.values[i] * b;
-			}
-
-			return new Polynomial(resultArray);
+			return Multiply(a, b);
 		}
+
 
 		/// <summary>
 		/// Check if two polynomials have the same coefficients.
@@ -180,7 +128,7 @@ namespace Polinom
 		/// <returns><c>true</c> if they have the same coefficients. Otherwise <c>falseW</c></returns>
 		public static bool operator ==(Polynomial a, Polynomial b)
 		{
-			return CheckValues(a.values, b.values);
+			return a.Equals(b);
 		}
 
 		/// <summary>
@@ -195,12 +143,131 @@ namespace Polinom
 		}
 
 		/// <summary>
+		/// Overload sum operation for two polynomials.
+		/// </summary>
+		/// <param name="a">First parameter.</param>
+		/// <param name="b">Second parameter.</param>
+		/// <returns>The result of sum of two polynomials</returns>
+		public static Polynomial Add(Polynomial a, Polynomial b)
+		{
+			Polynomial result;
+			double[] array;
+
+			if (a._values.Length < b._values.Length)
+			{
+				result = b.Clone();
+				array = a._values;
+			}
+			else
+			{
+				result = a.Clone();
+				array = b._values;
+			}
+
+			for (int i = 0; i < array.Length; i++)
+			{
+				result._values[i] += array[i];
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Overload sum operation between polynomial and digit.
+		/// </summary>
+		/// <param name="a">The polynomial</param>
+		/// <param name="b">The digit.</param>
+		/// <returns>The result of sum</returns>
+		public static Polynomial Add(Polynomial a, double b)
+		{
+			a._values[0] += b;
+
+			return new Polynomial(a._values);
+		}
+
+		/// <summary>
+		/// Overload subtraction operation for two polynomials.
+		/// </summary>
+		/// <param name="a">First parameter.</param>
+		/// <param name="b">Second parameter.</param>
+		/// <returns>The result of subtraction of two polynomials</returns>
+		public static Polynomial Subtract(Polynomial a, Polynomial b)
+		{
+			ChangeSign(b._values);
+
+			return Add(a, b);
+		}
+
+		/// <summary>
+		/// Overload subtraction operation between polynomial and digit.
+		/// </summary>
+		/// <param name="a">The polynomial</param>
+		/// <param name="b">The digit.</param>
+		/// <returns>The result of subtraction.</returns>
+		public static Polynomial Subtract(Polynomial a, double b)
+		{
+			a._values[0] -= b;
+
+			return new Polynomial(a._values);
+		}
+
+		/// <summary>
+		/// Overload multiply operation for two polynomials.
+		/// </summary>
+		/// <param name="a">First parameter.</param>
+		/// <param name="b">Second parameter.</param>
+		/// <returns>The result of multiply of two polynomials</returns>
+		public static Polynomial Multiply(Polynomial a, Polynomial b)
+		{
+			double[] resultArray = new double[a._values.Length + b._values.Length - 1];
+
+			for (int i = 0; i < a._values.Length; i++)
+			{
+				for (int j = 0; j < b._values.Length; j++)
+				{
+					resultArray[i + j] += a._values[i] * b._values[j];
+				}
+			}
+
+			return new Polynomial(resultArray);
+		}
+
+		/// <summary>
+		/// Overload multiply operation between polynomial and digit.
+		/// </summary>
+		/// <param name="a">The polynomial</param>
+		/// <param name="b">The digit.</param>
+		/// <returns>The result of multiply.</returns>
+		public static Polynomial Multiply(Polynomial a, double b)
+		{
+			double[] resultArray = new double[a._values.Length];
+
+			for (int i = 0; i < a._values.Length; i++)
+			{
+				resultArray[i] = a._values[i] * b;
+			}
+
+			return new Polynomial(resultArray);
+		}
+
+
+		/// <summary>
+		/// Create a new instance of <see cref="Polynomial"/> through interface 
+		/// with the same values as the existing instance.
+		/// </summary>
+		/// <returns>New <see cref="Polynomial"/>.</returns>
+		object ICloneable.Clone()
+		{
+			return Clone();
+		}
+
+		/// <summary>
 		/// Create a new instance of <see cref="Polynomial"/> with the same values as the existing instance.
 		/// </summary>
 		/// <returns>New <see cref="Polynomial"/>.</returns>
-		public object Clone()
+		public Polynomial Clone()
 		{
-			return new Polynomial(this.values);
+			return new Polynomial(this._values);
 		}
 
 		/// <summary>
@@ -209,10 +276,8 @@ namespace Polinom
 		/// <param name="obj">The object to be compared.</param>
 		/// <returns><c>true</c>If equals. Otherwise <c>false</c></returns>
 		public override bool Equals(object obj)
-		{
-			if (obj.GetType() != this.GetType()) return false;
-
-			return this.Equals((Polynomial)obj);
+		{ 
+			return this.Equals(obj as Polynomial);
 		}
 
 		/// <summary>
@@ -222,7 +287,11 @@ namespace Polinom
 		/// <returns><c>true</c>If equals. Otherwise <c>false</c></returns>
 		public bool Equals(Polynomial other)
 		{
-			return CheckValues(this.values, other.values);
+			if (ReferenceEquals(this, other)) return true;
+			if (this.MaxPower != other.MaxPower) return false;
+			if (ReferenceEquals(this, null) || ReferenceEquals(other, null)) return false;
+
+			return CheckValues(this._values, other._values);
 		}
 
 		/// <summary>
@@ -234,16 +303,16 @@ namespace Polinom
 			const int IntSize = 32;
 			double sumValues = 0;
 
-			for (int i = 0; i < this.values.Length; i++)
+			for (int i = 0; i < this._values.Length; i++)
 			{
-				sumValues += this.values[i];
+				sumValues += this._values[i];
 			}
 
 			long longtemp = (long)sumValues;
 			int intPart2 = (int)longtemp;
 			int intPart1 = (int)longtemp >> IntSize;
 
-			return (intPart1 ^ intPart2) + this.values.Length;
+			return (intPart1 ^ intPart2) + this._values.Length;
 		}
 
 		/// <summary>
@@ -254,17 +323,17 @@ namespace Polinom
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 
-			for (int i = this.values.Length - 1; i > 1; i--)
+			for (int i = this._values.Length - 1; i > 1; i--)
 			{
-				stringBuilder.AppendFormat("{0}x^{1} + ", this.values[i], i);
+				stringBuilder.AppendFormat("{0}x^{1} + ", this._values[i], i);
 			}
 
-			if (this.values.Length >= 2)
+			if (this._values.Length >= 2)
 			{
-				stringBuilder.AppendFormat("{0}x + ", this.values[1]);
+				stringBuilder.AppendFormat("{0}x + ", this._values[1]);
 			}
 
-			stringBuilder.AppendFormat("{0}", this.values[0]);
+			stringBuilder.AppendFormat("{0}", this._values[0]);
 
 			return stringBuilder.ToString();
 		}
@@ -283,12 +352,12 @@ namespace Polinom
 			}
 
 			bool isEqual = true;
-			const double Precision = 0.01;
+			double epsilon = 0.0001;
 			int i = 0;
 
 			while ((i < firstArray.Length) && isEqual)
 			{
-				isEqual = (Math.Abs(firstArray[i] - secondArray[i]) < Precision);
+				isEqual = (Math.Abs(firstArray[i] - secondArray[i]) < epsilon);
 				i++;
 			}
 
