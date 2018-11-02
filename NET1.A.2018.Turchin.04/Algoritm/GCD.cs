@@ -39,9 +39,7 @@ namespace NET1.A._2018.Turchin._04
 			Stopwatch watch = Stopwatch.StartNew();
 
 			int result = LogicEuclidean(a, b);
-
 			watch.Stop();
-
 			timeMilliseconds = watch.ElapsedMilliseconds;
 
 			return result;
@@ -228,15 +226,9 @@ namespace NET1.A._2018.Turchin._04
 		/// <returns>The <see cref="int"/>.</returns>
 		private static int HiddenGCD(int[] array, LogicGCD logic)
 		{
-			if (array == null)
-			{
-				throw new ArgumentNullException(nameof(array));
-			}
+			if (array == null) throw new ArgumentNullException(nameof(array));
 
-			if (array.Length == 0)
-			{
-				throw new ArgumentException(nameof(array));
-			}
+			if (array.Length == 0) throw new ArgumentException(nameof(array));
 
 			int result = array[0];
 			for (int i = 1; i < array.Length; i++)
@@ -255,8 +247,8 @@ namespace NET1.A._2018.Turchin._04
 		/// <returns>The greatest common divisor of <paramref name="a"/> and <paramref name="b"/>.</returns>
 		private static int LogicEuclidean(int a, int b)
 		{
-			a *= (a < 0) ? -1 : 1;
-			b *= (b < 0) ? -1 : 1;
+			a = Math.Abs(a);
+			b = Math.Abs(b);
 
 			while ((a != b) && (a > 0) && (b > 0))
 			{
@@ -281,8 +273,8 @@ namespace NET1.A._2018.Turchin._04
 		/// <returns>The greatest common divisor of <paramref name="a"/> and <paramref name="b"/>.</returns>
 		private static int LogicBinary(int a, int b)
 		{
-			a *= (a < 0) ? -1 : 1;
-			b *= (b < 0) ? -1 : 1;
+			a = Math.Abs(a);
+			b = Math.Abs(b);
 
 			int multiplier = 1;
 
