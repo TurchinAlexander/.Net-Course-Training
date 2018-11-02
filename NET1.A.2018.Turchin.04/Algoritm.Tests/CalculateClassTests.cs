@@ -29,6 +29,16 @@ namespace NET1.A._2018.Turchin._04.Tests
 			Assert.IsTrue(Execute.CheckStringArrays(expected, result));
 		}
 
+		[TestCaseSource("TestToBinary")]
+		public void TransformToBinary_DoubleArrayAndDelegate_ReturnStringArray(double[] array, string[] expected)
+		{
+			Calculate.Tranformator tranformator = Calculate.ToBinary;
+
+			string[] actual = Calculate.TranformToWords(array, tranformator);
+
+			Assert.IsTrue(Execute.CheckStringArrays(expected, actual));
+		}
+
 		private static object[] TestVerbal =
 		{
 			new object[]

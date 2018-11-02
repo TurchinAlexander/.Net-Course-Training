@@ -10,6 +10,8 @@ namespace NET1.A._2018.Turchin._04
 	/// </summary>
     public static class Calculate
     {
+		public delegate string Tranformator(double number);
+
 		/// <summary>
 		/// Converts real numbers in verbal description.
 		/// </summary>
@@ -17,40 +19,23 @@ namespace NET1.A._2018.Turchin._04
 		/// <returns>The array of verbal descriptions of real numbers.</returns>
 		public static string[] TransformToWords(double[] array)
 		{
-			Dictionary<char, string> dictionary = new Dictionary<char, string>
-			{
-				{ '0', "zero" },
-				{ '1', "one" },
-				{ '2', "two" },
-				{ '3', "three" },
-				{ '4', "four" },
-				{ '5', "five" },
-				{ '6', "six" },
-				{ '7', "seven" },
-				{ '8', "eight" },
-				{ '9', "nine" },
-				{ '-', "minus" },
-				{ ',', "point" },
-			};
-
 			string[] result = new string[array.Length];
 			
 			for (int i = 0; i < array.Length; i++)
 			{
-				if (!SpecialCases(array[i], ref result[i]))
-				{
-					string stringValue = array[i].ToString();
-					StringBuilder stringBuilder = new StringBuilder();
+				result[i] = ToWord(array[i]);
+			}
 
-					for (int j = 0; j < stringValue.Length; j++)
-					{
-						stringBuilder.AppendFormat("{0} ", dictionary[stringValue[j]]);
-					}
+			return result;
+		}
 
-					stringBuilder.Length--;
+		public static string[] TranformToWords(double[] array, Tranformator tranformator)
+		{
+			string[] result = new string[array.Length];
 
-					result[i] = stringBuilder.ToString();
-				}
+			for (int i = 0; i < array.Length; i++)
+			{
+				result[i] = tranformator(array[i]);
 			}
 
 			return result;
@@ -98,6 +83,49 @@ namespace NET1.A._2018.Turchin._04
 		}
 
 		/// <summary>
+		/// Convert a <see cref="double"/> to verbal representation.
+		/// </summary>
+		/// <param name="number">The <see cref="double"/>.</param>
+		/// <returns>The <see cref="string"/> of verbal representation.</returns>
+		public static string ToWord(this double number)
+		{
+			Dictionary<char, string> dictionary = new Dictionary<char, string>
+			{
+				{ '0', "zero" },
+				{ '1', "one" },
+				{ '2', "two" },
+				{ '3', "three" },
+				{ '4', "four" },
+				{ '5', "five" },
+				{ '6', "six" },
+				{ '7', "seven" },
+				{ '8', "eight" },
+				{ '9', "nine" },
+				{ '-', "minus" },
+				{ ',', "point" },
+			};
+
+			string result = "";
+
+			if (!SpecialCases(number, ref result))
+			{
+				string stringValue = number.ToString();
+				StringBuilder stringBuilder = new StringBuilder();
+
+				for (int j = 0; j < stringValue.Length; j++)
+				{
+					stringBuilder.AppendFormat("{0} ", dictionary[stringValue[j]]);
+				}
+
+				stringBuilder.Length--;
+
+				result = stringBuilder.ToString();
+			}
+
+			return result;
+		}
+
+		/// <summary>
 		/// Check input number for Nan, positive and negative infinite.
 		/// </summary>
 		/// <param name="number">The input number.</param>
@@ -119,7 +147,7 @@ namespace NET1.A._2018.Turchin._04
 			}
 			else if (double.IsNegativeInfinity(number))
 			{
-				result = "Nagative Infinite";
+				result = "Negative Infinite";
 				isSpecialCase = true;
 			}
 
