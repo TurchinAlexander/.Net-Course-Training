@@ -54,6 +54,8 @@
     <Compile Include="Comparators\ComparatorSumAscend.cs" />
     <Compile Include="Comparators\ComparatorSumDescend.cs" />
     <Compile Include="Comparators\ComparatorMaxValueDescend.cs" />
+    <Compile Include="JaggedSort2InterfaceTests.cs" />
+    <Compile Include="JaggedSortDelegateTests.cs" />
     <Compile Include="JaggedSortTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

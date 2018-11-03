@@ -41,7 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\DelegateAdapter.cs" />
+    <Compile Include="Delegates\DelegateType.cs" />
     <Compile Include="Interfaces\ICompare.cs" />
+    <Compile Include="JaggedSort2.cs" />
     <Compile Include="JaggedSort.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

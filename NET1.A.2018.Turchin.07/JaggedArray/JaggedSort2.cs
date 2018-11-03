@@ -8,7 +8,7 @@ namespace JaggedArray
 	/// <summary>
 	/// Represent sort for jagged array.
 	/// </summary>
-    public static class JaggedSort
+    public static class JaggedSort2
     {
 		/// <summary>
 		/// Sort the jagged array.
@@ -17,7 +17,7 @@ namespace JaggedArray
 		/// <param name="comparator">Compare our element in the array.</param>
 		public static void Execute(int[][] array, IComparer comparator)
 		{ 
-			SortJaggedArray(array, comparator);
+			SortJaggedArray(array, comparator.Compare);
 		}
 
 		/// <summary>
@@ -27,7 +27,7 @@ namespace JaggedArray
 		/// <param name="delegateComparer">The delegate, which contain method to compare.</param>
 		public static void Execute(int[][] array, DelegateType.Comparer delegateComparer)
 		{
-			SortJaggedArray(array, new DelegateAdapter(delegateComparer));
+			SortJaggedArray(array, delegateComparer);
 		}
 
 		/// <summary>
@@ -36,13 +36,13 @@ namespace JaggedArray
 		/// <param name="keyValues">Key values of jagged array.</param>
 		/// <param name="array">Jagged array.</param>
 		/// <param name="comparator">Compare our element in the array.</param>
-		private static void SortJaggedArray(int[][] array, IComparer comparator)
+		private static void SortJaggedArray(int[][] array, DelegateType.Comparer comparator)
 		{
 			for (int i = 0; i < array.Length - 1; i++)
 			{
 				for (int j = 0; j < array.Length - i - 1; j++)
 				{
-					if (comparator.Compare(array[j], array[j + 1]) > 0)
+					if (comparator(array[j], array[j + 1]) > 0)
 					{
 						Swap(ref array[j], ref array[j + 1]);
 					}
