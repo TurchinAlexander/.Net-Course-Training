@@ -9,21 +9,15 @@ namespace JaggedArray.Interfaces
 	/// <summary>
 	/// Interface to compare two int values.
 	/// </summary>
-	public interface ICompare
+	public interface IComparer
 	{
 		/// <summary>
-		/// Method to compare to int values.
+		/// Method to compare two int arrays.
 		/// </summary>
-		/// <param name="a">First value.</param>
-		/// <param name="b">Second value.</param>
-		/// <returns><c> if we should swap elements. Otherwise, <c>false</c>.</returns>
-		bool Compare(int a, int b);
-
-		/// <summary>
-		/// Method to indicate, what value we used to compare.
-		/// </summary>
-		/// <param name="array">Initial array.</param>
-		/// <returns>The key value.</returns>
-		int KeyValue(int[] array);
+		/// <param name="a">First array.</param>
+		/// <param name="b">Second array.</param>
+		/// <returns>Greater than 0, if <paramref name="a"/> > <paramref name="b"/>. 0 if equals.
+		/// And less than 0, if <paramref name="a"/> < <paramref name="b"/>.</returns>
+		int Compare(int[] a, int[] b);
 	}
 }

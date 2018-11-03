@@ -2,20 +2,24 @@
 
 namespace JaggedArray.Tests.Comparators
 {
-	public class ComparatorMinValueAscend : ICompare
+	public class ComparatorMinValueAscend : IComparer
 	{
-		public bool Compare(int a, int b)
+		public int Compare(int[] a, int[] b)
 		{
-			return (a > b);
+			if (((a == null) || (a.Length == 0)) && ((b == null) || (b.Length == 0)))
+				return 0;
+
+			if ((a == null) || (a.Length == 0))
+				return -1;
+
+			if ((b == null) || (b.Length == 0))
+				return 1;
+
+			return KeyValue(a) - KeyValue(b);
 		}
 
-		public int KeyValue(int[] array)
-		{
-			if ((array == null) || (array.Length == 0))
-			{
-				return int.MinValue;
-			}
-
+		private int KeyValue(int[] array)
+		{ 
 			int min = array[0];
 			for (int i = 1; i < array.Length; i++)
 			{
