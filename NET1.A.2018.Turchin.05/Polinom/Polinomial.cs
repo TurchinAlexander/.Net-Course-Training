@@ -300,19 +300,7 @@ namespace Polinom
 		/// <returns>Hash code of the instance.</returns>
 		public override int GetHashCode()
 		{
-			const int IntSize = 32;
-			double sumValues = 0;
-
-			for (int i = 0; i < this._values.Length; i++)
-			{
-				sumValues += this._values[i];
-			}
-
-			long longtemp = (long)sumValues;
-			int intPart2 = (int)longtemp;
-			int intPart1 = (int)longtemp >> IntSize;
-
-			return (intPart1 ^ intPart2) + this._values.Length;
+			return MaxPower;
 		}
 
 		/// <summary>
