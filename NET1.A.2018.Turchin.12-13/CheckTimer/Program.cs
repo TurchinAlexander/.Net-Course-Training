@@ -1,7 +1,6 @@
 ﻿using System;
 
 using Сountdown;
-using Countdown.Interfaces;
 
 namespace CheckTimer
 {
@@ -13,7 +12,7 @@ namespace CheckTimer
 			int time = 2000;
 
 			CountdownTimer timer = new CountdownTimer(time);
-			timer.Register(check);
+			timer.NewMail += check.Update;
 
 			Console.ReadKey();
 		}
@@ -22,7 +21,7 @@ namespace CheckTimer
 	/// <summary>
 	/// Class which has method to catch information from timer.
 	/// </summary>
-	public class Check : IObserverTimer<string>
+	public class Check
 	{
 		public void Update(object sender, string message)
 		{
