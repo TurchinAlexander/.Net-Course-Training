@@ -1,23 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Sorts
 {
-    /// <summary>
-    /// Represent the class, which contains Merge and Quick sort algorithms.
-    /// </summary>
-    public static class Sort
-    {
-        /// <summary>
-        /// Represent the merge sort.
-        /// </summary>
-        /// <param name="array">Input array.</param>
+	/// <summary>
+	/// Represent the class, which contains Merge and Quick sort algorithms.
+	/// </summary>
+	public static class Sort<T> where T: IComparable<T>
+	{
+		/// <summary>
+		/// Represent the merge sort.
+		/// </summary>
+		/// <param name="array">Input array.</param>
 		/// <exception cref="ArgumentException">If the length of the array is zero.</exception>
 		/// <exception cref="ArgumentNullException">If array is null</exception>
-        public static void Merge(int[] array)
-        {
-            CheckConditions(array);
+		public static void Merge(T[] array)
+		{
+			CheckConditions(array);
 			MergeLogic(array, 0, array.Length - 1);
-        }
+		}
 
 		/// <summary>
 		/// Represent the merge sort.
@@ -27,7 +28,7 @@ namespace Sorts
 		/// <param name="right">The right bound of the array.</param>
 		/// <exception cref="ArgumentException">If the length of the array is zero.</exception>
 		/// <exception cref="ArgumentNullException">If array is null</exception>
-		public static void Merge(int[] array, int left, int right)
+		public static void Merge(T[] array, int left, int right)
 		{
 			CheckConditions(array, left, right);
 			MergeLogic(array, left, right);
@@ -39,7 +40,7 @@ namespace Sorts
 		/// <param name="array">Input array.</param>
 		/// <exception cref="ArgumentException">If the length of the array is zero.</exception>
 		/// <exception cref="ArgumentNullException">If array is null</exception>
-		public static void Quick(int[] array)
+		public static void Quick(T[] array)
 		{
 			CheckConditions(array);
 			QuickLogic(array, 0, array.Length - 1);
@@ -53,7 +54,7 @@ namespace Sorts
 		/// <param name="right">The right bound of the array.</param>
 		/// <exception cref="ArgumentException">If the length of the array is zero.</exception>
 		/// <exception cref="ArgumentNullException">If array is null</exception>
-		public static void Quick(int[] array, int left, int right)
+		public static void Quick(T[] array, int left, int right)
 		{
 			CheckConditions(array, left, right);
 			QuickLogic(array, left, right);
@@ -65,7 +66,7 @@ namespace Sorts
 		/// <param name="array">Input array.</param>
 		/// <param name="left">The left bound of the array.</param>
 		/// <param name="right">The right bound of the array.</param>
-		private static void MergeLogic(int[] array, int left, int right)
+		private static void MergeLogic(T[] array, int left, int right)
 		{
 			int middle = (left + right) / 2;
 
@@ -87,16 +88,16 @@ namespace Sorts
 		/// <param name="left">The left bound of the first array.</param>
 		/// <param name="middle">The right bound of the first array and the left bound of the second one.</param>
 		/// <param name="right">The right bound of the second array.</param>
-		private static void MergeLogic(int[] array, int left, int middle, int right)
+		private static void MergeLogic(T[] array, int left, int middle, int right)
 		{
 			int firstArray = left;
 			int secondArray = middle + 1;
-			int[] temp = new int[right - left + 1];
+			T[] temp = new T[right - left + 1];
 			int tempIndex = 0;
 
 			while ((firstArray <= middle) && (secondArray <= right))
 			{
-				temp[tempIndex] = (array[firstArray] > array[secondArray])
+				temp[tempIndex] = (array[firstArray].CompareTo(array[secondArray]) > 0)
 					? array[secondArray++]
 					: array[firstArray++];
 				tempIndex++;
@@ -124,26 +125,26 @@ namespace Sorts
         /// <param name="arr">Input array.</param>
         /// <param name="left">The left bound of the array.</param>
         /// <param name="right">The right bound </param>
-        private static void QuickLogic(int[] arr, int left, int right)
+        private static void QuickLogic(T[] array, int left, int right)
         {
             int i = left, j = right;
-            int x = arr[(left + right) / 2];
+            T x = array[(left + right) / 2];
 
             do
             {
-                while (arr[i] < x)
+                while (array[i].CompareTo(x) < 0)
                 {
                     i++;
                 }
 
-                while (arr[j] > x)
+                while (array[j].CompareTo(x) > 0)
                 {
                     j--;
                 }
 
                 if (i <= j)
                 {
-					Swap(ref arr[i], ref arr[j]);
+					Swap(ref array[i], ref array[j]);
 
                     i++;
                     j--;
@@ -153,12 +154,12 @@ namespace Sorts
 
             if (left < j)
             {
-                Quick(arr, left, j);
+                Quick(array, left, j);
             }
 
             if (i < right)
             {
-                Quick(arr, i, right);
+                Quick(array, i, right);
             }
         }
 
@@ -167,11 +168,11 @@ namespace Sorts
 		/// </summary>
 		/// <param name="value1">Argument 1.</param>
 		/// <param name="value2">Argument 2.</param>
-		private static void Swap(ref int value1, ref int value2)
+		private static void Swap(ref T a, ref T b)
 		{
-			int temp = value1;
-			value1 = value2;
-			value2 = temp;
+			T temp = a;
+			a = b;
+			b = temp;
 		}
 
 		/// <summary>
@@ -180,17 +181,10 @@ namespace Sorts
 		/// <param name="array">Input array.</param>
 		/// <exception cref="ArgumentException">If the length of the array is zero.</exception>
 		/// <exception cref="ArgumentNullException">If array is null</exception>
-		private static void CheckConditions(int[] array)
+		private static void CheckConditions<T>(T[] array)
         {
-            if (array == null)
-            {
-                throw new ArgumentNullException(nameof(array));
-            }
-
-			if (array.Length == 0)
-			{
-				throw new ArgumentException(nameof(array));
-			}
+            if (array == null) throw new ArgumentNullException(nameof(array));
+			if (array.Length == 0) throw new ArgumentException(nameof(array));
         }
 
 		/// <summary>
@@ -201,14 +195,11 @@ namespace Sorts
 		/// <param name="right">The right bound of the array.</param>
 		/// <exception cref="ArgumentException">If the length of the array is zero or the bound are invalid.</exception>
 		/// <exception cref="ArgumentNullException">If array is null</exception>
-		private static void CheckConditions(int[] array, int left, int right)
+		private static void CheckConditions(T[] array, int left, int right)
 		{
 			CheckConditions(array);
 
-			if ((left < 0) || (right < 0) || (left > right))
-			{
-				throw new ArgumentException();
-			}
+			if ((left < 0) || (right < 0) || (left > right)) throw new ArgumentException();
 		}
     }
 }

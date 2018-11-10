@@ -10,14 +10,14 @@ namespace Sorts.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void MergeMethod_Null_ReturnThrowArgumentNullException()
         {
-            Sort.Merge(null);
+            Sort<int>.Merge(null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void MergeMethod_ZeroLenghtArray_ReturnThrowArgumentNullException()
         {
-            Sort.Merge(new int[] { });
+			Sort<int>.Merge(new int[] { });
         }
 
         [TestMethod]
@@ -25,7 +25,7 @@ namespace Sorts.Tests
         {
             int[] array = new int[] { 1, 2, 21, 19, 0, -1 };
 
-            Sort.Merge(array);
+			Sort<int>.Merge(array);
 
             Assert.IsTrue(CheckArrayNotDecreasing(array));
         }
@@ -34,8 +34,8 @@ namespace Sorts.Tests
         public void MergeMethod_BigRandomArray_ReturnSortedArray()
         {
 			int[] array = RandomBigArray();
-		
-            Sort.Merge(array);
+
+			Sort<int>.Merge(array);
 
             Assert.IsTrue(CheckArrayNotDecreasing(array));
         }
@@ -44,14 +44,14 @@ namespace Sorts.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void QuickMethod_Null_ReturnThrowArgumentNullException()
         {
-            Sort.Quick(null);
+			Sort<int>.Quick(null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void QuickMethod_ZeroLenghtArray_ReturnThrowArgumentNullException()
         {
-            Sort.Quick(new int[] { });
+			Sort<int>.Quick(new int[] { });
         }
 
         [TestMethod]
@@ -59,7 +59,7 @@ namespace Sorts.Tests
         {
             int[] array = new int[] { 1, 2, 21, 19, 0, -1 };
 
-            Sort.Quick(array);
+			Sort<int>.Quick(array);
 
             Assert.IsTrue(CheckArrayNotDecreasing(array));
         }
@@ -69,7 +69,7 @@ namespace Sorts.Tests
 		{
 			int[] array = RandomBigArray();
 
-            Sort.Quick(array);
+			Sort<int>.Quick(array);
 
             Assert.IsTrue(CheckArrayNotDecreasing(array));
         }
