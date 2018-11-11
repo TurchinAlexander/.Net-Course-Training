@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using BasicAlgorithms.Tests.Comparers;
+
 namespace BasicAlgorithms.Tests
 {
     [TestClass]
@@ -8,16 +10,23 @@ namespace BasicAlgorithms.Tests
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void MergeMethod_Null_ReturnThrowArgumentNullException()
+        public void MergeMethod_NullArray_ReturnThrowArgumentNullException()
         {
-            Sort<int>.Merge(null);
+            Sort<int>.Merge(null, new IntAscendComparer());
         }
 
-        [TestMethod]
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void MergeMethod_NullComparer_ReturnThrowArgumentNullException()
+		{
+			Sort<int>.Merge(new int[] {1, 2, 3 }, null);
+		}
+
+		[TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void MergeMethod_ZeroLenghtArray_ReturnThrowArgumentNullException()
+        public void MergeMethod_ZeroLenghtArray_ReturnThrowArgumentException()
         {
-			Sort<int>.Merge(new int[] { });
+			Sort<int>.Merge(new int[] { }, new IntAscendComparer());
         }
 
         [TestMethod]
@@ -25,7 +34,7 @@ namespace BasicAlgorithms.Tests
         {
             int[] array = new int[] { 1, 2, 21, 19, 0, -1 };
 
-			Sort<int>.Merge(array);
+			Sort<int>.Merge(array, new IntAscendComparer());
 
             Assert.IsTrue(CheckArrayNotDecreasing(array));
         }
@@ -35,23 +44,30 @@ namespace BasicAlgorithms.Tests
         {
 			int[] array = RandomBigArray();
 
-			Sort<int>.Merge(array);
+			Sort<int>.Merge(array, new IntAscendComparer());
 
             Assert.IsTrue(CheckArrayNotDecreasing(array));
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void QuickMethod_Null_ReturnThrowArgumentNullException()
+        public void QuickMethod_NullArray_ReturnThrowArgumentNullException()
         {
-			Sort<int>.Quick(null);
+			Sort<int>.Quick(null, new IntAscendComparer());
         }
 
-        [TestMethod]
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void QuickMethod_NullComparer_ReturnThrowArgumentNullException()
+		{
+			Sort<int>.Quick(new int[] { 1, 2, 3}, null);
+		}
+
+		[TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void QuickMethod_ZeroLenghtArray_ReturnThrowArgumentNullException()
         {
-			Sort<int>.Quick(new int[] { });
+			Sort<int>.Quick(new int[] { }, new IntAscendComparer());
         }
 
         [TestMethod]
@@ -59,7 +75,7 @@ namespace BasicAlgorithms.Tests
         {
             int[] array = new int[] { 1, 2, 21, 19, 0, -1 };
 
-			Sort<int>.Quick(array);
+			Sort<int>.Quick(array, new IntAscendComparer());
 
             Assert.IsTrue(CheckArrayNotDecreasing(array));
         }
@@ -69,7 +85,7 @@ namespace BasicAlgorithms.Tests
 		{
 			int[] array = RandomBigArray();
 
-			Sort<int>.Quick(array);
+			Sort<int>.Quick(array, new IntAscendComparer());
 
             Assert.IsTrue(CheckArrayNotDecreasing(array));
         }

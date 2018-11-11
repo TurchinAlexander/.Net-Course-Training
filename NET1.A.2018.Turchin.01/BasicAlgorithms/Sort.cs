@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BasicAlgoritm
+namespace BasicAlgorithms
 {
 	/// <summary>
 	/// Represent the class, which contains Merge and Quick sort algorithms.
 	/// </summary>
-	public static class Sort<T> where T: IComparable<T>
+	public static class Sort<T>
 	{
+		private static IComparer<T> Comparer;
+
 		/// <summary>
 		/// Represent the merge sort.
 		/// </summary>
 		/// <param name="array">Input array.</param>
+		/// <param name="comparer">Method </param>
 		/// <exception cref="ArgumentException">If the length of the array is zero.</exception>
-		/// <exception cref="ArgumentNullException">If array is null</exception>
-		public static void Merge(T[] array)
+		/// <exception cref="ArgumentNullException">If array or comparer is null.</exception>
+		public static void Merge(T[] array, IComparer<T> comparer)
 		{
-			CheckConditions(array);
+			CheckConditions(array, comparer);
+			Comparer = comparer;
 			MergeLogic(array, 0, array.Length - 1);
 		}
 
@@ -28,9 +32,10 @@ namespace BasicAlgoritm
 		/// <param name="right">The right bound of the array.</param>
 		/// <exception cref="ArgumentException">If the length of the array is zero.</exception>
 		/// <exception cref="ArgumentNullException">If array is null</exception>
-		public static void Merge(T[] array, int left, int right)
+		public static void Merge(T[] array, int left, int right, IComparer<T> comparer)
 		{
-			CheckConditions(array, left, right);
+			CheckConditions(array, left, right, comparer);
+			Comparer = comparer;
 			MergeLogic(array, left, right);
 		}
 
@@ -40,9 +45,10 @@ namespace BasicAlgoritm
 		/// <param name="array">Input array.</param>
 		/// <exception cref="ArgumentException">If the length of the array is zero.</exception>
 		/// <exception cref="ArgumentNullException">If array is null</exception>
-		public static void Quick(T[] array)
+		public static void Quick(T[] array, IComparer<T> comparer)
 		{
-			CheckConditions(array);
+			CheckConditions(array, comparer);
+			Comparer = comparer;
 			QuickLogic(array, 0, array.Length - 1);
 		}
 
@@ -54,9 +60,10 @@ namespace BasicAlgoritm
 		/// <param name="right">The right bound of the array.</param>
 		/// <exception cref="ArgumentException">If the length of the array is zero.</exception>
 		/// <exception cref="ArgumentNullException">If array is null</exception>
-		public static void Quick(T[] array, int left, int right)
+		public static void Quick(T[] array, int left, int right, IComparer<T> comparer)
 		{
-			CheckConditions(array, left, right);
+			CheckConditions(array, left, right, comparer);
+			Comparer = comparer;
 			QuickLogic(array, left, right);
 		}
 
@@ -97,7 +104,7 @@ namespace BasicAlgoritm
 
 			while ((firstArray <= middle) && (secondArray <= right))
 			{
-				temp[tempIndex] = (array[firstArray].CompareTo(array[secondArray]) > 0)
+				temp[tempIndex] = (Comparer.Compare(array[firstArray], array[secondArray]) > 0)
 					? array[secondArray++]
 					: array[firstArray++];
 				tempIndex++;
@@ -132,12 +139,12 @@ namespace BasicAlgoritm
 
             do
             {
-                while (array[i].CompareTo(x) < 0)
+                while (Comparer.Compare(array[i], x) < 0)
                 {
                     i++;
                 }
 
-                while (array[j].CompareTo(x) > 0)
+                while (Comparer.Compare(array[j], x) > 0)
                 {
                     j--;
                 }
@@ -154,12 +161,12 @@ namespace BasicAlgoritm
 
             if (left < j)
             {
-                Quick(array, left, j);
+                QuickLogic(array, left, j);
             }
 
             if (i < right)
             {
-                Quick(array, i, right);
+                QuickLogic(array, i, right);
             }
         }
 
@@ -181,9 +188,10 @@ namespace BasicAlgoritm
 		/// <param name="array">Input array.</param>
 		/// <exception cref="ArgumentException">If the length of the array is zero.</exception>
 		/// <exception cref="ArgumentNullException">If array is null</exception>
-		private static void CheckConditions<T>(T[] array)
+		private static void CheckConditions(T[] array, IComparer<T> comparer)
         {
             if (array == null) throw new ArgumentNullException(nameof(array));
+			if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 			if (array.Length == 0) throw new ArgumentException(nameof(array));
         }
 
@@ -195,9 +203,9 @@ namespace BasicAlgoritm
 		/// <param name="right">The right bound of the array.</param>
 		/// <exception cref="ArgumentException">If the length of the array is zero or the bound are invalid.</exception>
 		/// <exception cref="ArgumentNullException">If array is null</exception>
-		private static void CheckConditions(T[] array, int left, int right)
+		private static void CheckConditions(T[] array, int left, int right, IComparer<T> comparer)
 		{
-			CheckConditions(array);
+			CheckConditions(array, comparer);
 
 			if ((left < 0) || (right < 0) || (left > right)) throw new ArgumentException();
 		}

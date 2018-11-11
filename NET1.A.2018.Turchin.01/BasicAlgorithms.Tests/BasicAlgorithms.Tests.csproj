@@ -54,8 +54,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comparers\IntAscendComparer.cs" />
+    <Compile Include="Comparers\IntDescendComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchTests.cs" />
+    <Compile Include="SearchClassTests.cs" />
     <Compile Include="SortClassTests.cs" />
   </ItemGroup>
   <ItemGroup>

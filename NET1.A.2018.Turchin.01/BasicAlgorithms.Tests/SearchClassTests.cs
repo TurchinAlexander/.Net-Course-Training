@@ -1,9 +1,11 @@
 ﻿using NUnit.Framework;
 
+using BasicAlgorithms.Tests.Comparers;
+
 namespace BasicAlgorithms.Tests
 {
 	[TestFixture]
-	class SearchTests
+	class SearchClassTests
 	{
 		static object[] RigthArray =
 		{
@@ -15,7 +17,7 @@ namespace BasicAlgorithms.Tests
 		[TestCaseSource("RigthArray")]
 		public void SearchBinary_RigthArray_FindIndex(int value, int[] array, int expected)
 		{
-			int actual = Search.Binary(array, value);
+			int actual = Search<int>.Binary(array, value, new IntAscendComparer());
 
 			Assert.AreEqual(expected, actual);
 		}
