@@ -26,9 +26,12 @@ namespace Algorithm
 		/// <summary>
 		/// Converts real numbers in some formate.
 		/// </summary>
+		/// <typeparam name="T">Input type.</typeparam>
+		/// <typeparam name="U">Output type.</typeparam>
 		/// <param name="array">Array of <see cref="double"/>.</param>
 		/// <param name="tranformator">Conversion format.</param>
 		/// <returns>The array of verbal descriptions of real numbers.</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="array"/>" or <paramref name="tranformator"/> is null.</exception>
 		public static U[] TranformTo<T, U>(T[] array, Func<T, U> tranformator)
 		{
 			if (array == null) throw new ArgumentNullException($"{nameof(array)} cannot be null.");
@@ -51,6 +54,7 @@ namespace Algorithm
 		/// <param name="array">Input array.</param>
 		/// <param name="IsValid">The criteria</param>
 		/// <returns>The filtered array.</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="array"/> or <paramref name="filter"/> is null.</exception>
 		public static T[] Filter<T>(this T[] array, Func<T, bool> filter)
 		{
 			if (array == null) throw new ArgumentNullException($"{nameof(array)} cannot be null.");
@@ -72,6 +76,7 @@ namespace Algorithm
 		/// </summary>
 		/// <param name="array">Array of <see cref="double"/>.</param>
 		/// <returns>The array of verbal descriptions of real numbers.</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="array"/> is null.</exception>
 		public static string[] TransformToWords(double[] array)
 		{
 			if (array == null) throw new ArgumentNullException($"{nameof(array)} cannot be null.");
@@ -91,6 +96,7 @@ namespace Algorithm
 		/// </summary>
 		/// <param name="array">Array of <see cref="double"/>.</param>
 		/// <returns>The array of <see cref="string"/>.</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="array"/> is null.</exception>
 		public static string[] TransformToBinary(double[] array)
 		{
 			if (array == null) throw new ArgumentNullException($"{nameof(array)} cannot be null.");
