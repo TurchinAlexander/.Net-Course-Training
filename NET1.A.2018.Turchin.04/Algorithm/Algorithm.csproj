@@ -7,8 +7,8 @@
     <ProjectGuid>{05B32774-128A-406D-B153-68E0E7F4D491}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Algoritm</RootNamespace>
-    <AssemblyName>Algoritm</AssemblyName>
+    <RootNamespace>Algorithm</RootNamespace>
+    <AssemblyName>Algorithm</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Calculate.cs" />
     <Compile Include="GCD.cs" />
+    <Compile Include="Interfaces\ITransformer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
