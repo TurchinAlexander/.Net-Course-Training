@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace NET1.A._2018.Turchin._04
+namespace Algorithm
 {
 	/// <summary>
 	/// Class to find gcd of values.

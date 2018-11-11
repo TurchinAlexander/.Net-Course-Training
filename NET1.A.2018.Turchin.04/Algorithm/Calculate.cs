@@ -3,39 +3,84 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace NET1.A._2018.Turchin._04
+namespace Algorithm
 {
 	/// <summary>
 	/// Class help convert double to verbal description and binary representation.
 	/// </summary>
     public static class Calculate
     {
-		public delegate string Tranformator(double number);
+		/// <summary>
+		/// Used to submit double like long.
+		/// </summary>
+		[StructLayout(LayoutKind.Explicit)]
+		private struct OneSpace
+		{
+			[FieldOffset(0)]
+			public double doubleNumber;
+
+			[FieldOffset(0)]
+			public ulong longNumber;
+		}
 
 		/// <summary>
-		/// Converts real numbers in verbal description.
+		/// Converts real numbers in some formate.
 		/// </summary>
-		/// <param name="array">Array of <see cref="double"/> numbers.</param>
+		/// <param name="array">Array of <see cref="double"/>.</param>
+		/// <param name="tranformator">Conversion format.</param>
 		/// <returns>The array of verbal descriptions of real numbers.</returns>
-		public static string[] TransformToWords(double[] array)
+		public static U[] TranformTo<T, U>(T[] array, Func<T, U> tranformator)
 		{
-			string[] result = new string[array.Length];
-			
+			if (array == null) throw new ArgumentNullException($"{nameof(array)} cannot be null.");
+			if (tranformator == null) throw new ArgumentNullException($"{nameof(tranformator)} cannot be null");
+
+			U[] result = new U[array.Length];
+
 			for (int i = 0; i < array.Length; i++)
 			{
-				result[i] = ToWord(array[i]);
+				result[i] = tranformator(array[i]);
 			}
 
 			return result;
 		}
 
-		public static string[] TranformToWords(double[] array, Tranformator tranformator)
+		/// <summary>
+		/// Extension to filter array by some criteria.
+		/// </summary>
+		/// <typeparam name="T">Type of the array.</typeparam>
+		/// <param name="array">Input array.</param>
+		/// <param name="IsValid">The criteria</param>
+		/// <returns>The filtered array.</returns>
+		public static T[] Filter<T>(this T[] array, Func<T, bool> filter)
 		{
-			string[] result = new string[array.Length];
+			if (array == null) throw new ArgumentNullException($"{nameof(array)} cannot be null.");
+			if (filter == null) throw new ArgumentNullException($"{nameof(filter)} cannot be null");
 
+			List<T> validList = new List<T>();
+
+			foreach(T element in array)
+			{
+				if (filter(element))
+					validList.Add(element);
+			}
+
+			return validList.ToArray();
+		}
+
+		/// <summary>
+		/// Converts real numbers in verbal format.
+		/// </summary>
+		/// <param name="array">Array of <see cref="double"/>.</param>
+		/// <returns>The array of verbal descriptions of real numbers.</returns>
+		public static string[] TransformToWords(double[] array)
+		{
+			if (array == null) throw new ArgumentNullException($"{nameof(array)} cannot be null.");
+
+			string[] result = new string[array.Length];
+			
 			for (int i = 0; i < array.Length; i++)
 			{
-				result[i] = tranformator(array[i]);
+				result[i] = ToWord(array[i]);
 			}
 
 			return result;
@@ -48,6 +93,8 @@ namespace NET1.A._2018.Turchin._04
 		/// <returns>The array of <see cref="string"/>.</returns>
 		public static string[] TransformToBinary(double[] array)
 		{
+			if (array == null) throw new ArgumentNullException($"{nameof(array)} cannot be null.");
+
 			string[] result = new string[array.Length];
 
 			for (int i = 0; i < array.Length; i++)
@@ -152,19 +199,6 @@ namespace NET1.A._2018.Turchin._04
 			}
 
 			return (isSpecialCase);
-		}
-
-		/// <summary>
-		/// Used to submit double like long.
-		/// </summary>
-		[StructLayout(LayoutKind.Explicit)]
-		private struct OneSpace
-		{
-			[FieldOffset(0)]
-			public double doubleNumber;
-
-			[FieldOffset(0)]
-			public ulong longNumber;
 		}
 	}
 }

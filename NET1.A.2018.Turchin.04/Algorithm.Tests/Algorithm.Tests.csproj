@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalculateClassTests.cs" />
+    <Compile Include="Filters\IntFilter.cs" />
+    <Compile Include="Filters\StringFilter.cs" />
     <Compile Include="GCDClassTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -56,9 +58,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Algoritm\Algoritm.csproj">
+    <ProjectReference Include="..\Algorithm\Algorithm.csproj">
       <Project>{05b32774-128a-406d-b153-68e0e7f4d491}</Project>
-      <Name>Algoritm</Name>
+      <Name>Algorithm</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

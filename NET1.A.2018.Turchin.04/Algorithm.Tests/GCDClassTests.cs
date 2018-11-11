@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace NET1.A._2018.Turchin._04.Tests
+namespace Algorithm.Tests
 {
 	[TestFixture]
 	class GCDClassTests
