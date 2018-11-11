@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-
-namespace Sorts
+namespace BasicAlgorithms
 {
-	public static class Search
+	public static class Search<T>
 	{
-		public static int Binary<T>(T[] array, T value) where T: IComparable<T>
+		public static int Binary(T[] array, T value, IComparer<T> comparer)
 		{
 			if (array == null) throw new ArgumentNullException($"{nameof(array)} cannot be null.");
 			if (array.Length == 0) throw new ArgumentException($"{nameof(array)} cannot be zero length.");
@@ -17,11 +16,11 @@ namespace Sorts
 			{
 				mid = (left + right) / 2;
 				
-				if (value.CompareTo(array[mid]) > 0)
+				if (comparer.Compare(value, array[mid]) > 0)
 				{
 					left = mid + 1;
 				} 
-				else if (value.CompareTo(array[mid]) < 0)
+				else if (comparer.Compare(value, array[mid]) < 0)
 				{
 					right = mid - 1;
 				} 

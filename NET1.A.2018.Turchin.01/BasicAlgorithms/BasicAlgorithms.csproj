@@ -7,8 +7,8 @@
     <ProjectGuid>{9ABE64A9-005E-4208-91F8-D08973969769}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sorts</RootNamespace>
-    <AssemblyName>Sorts</AssemblyName>
+    <RootNamespace>BasicAlgorithms</RootNamespace>
+    <AssemblyName>BasicAlgorithms</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

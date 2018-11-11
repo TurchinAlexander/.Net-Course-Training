@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sorts", "Sorts\Sorts.csproj", "{9ABE64A9-005E-4208-91F8-D08973969769}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicAlgorithms", "BasicAlgorithms\BasicAlgorithms.csproj", "{9ABE64A9-005E-4208-91F8-D08973969769}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sorts.Tests", "Sorts.Tests\Sorts.Tests.csproj", "{7C14D2FA-CF6F-4647-9738-92DE43855765}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicAlgorithms.Tests", "BasicAlgorithms.Tests\BasicAlgorithms.Tests.csproj", "{7C14D2FA-CF6F-4647-9738-92DE43855765}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

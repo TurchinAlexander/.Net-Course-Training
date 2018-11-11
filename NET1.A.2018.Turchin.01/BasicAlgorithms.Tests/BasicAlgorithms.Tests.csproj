@@ -10,8 +10,8 @@
     <ProjectGuid>{7C14D2FA-CF6F-4647-9738-92DE43855765}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sorts.Tests</RootNamespace>
-    <AssemblyName>Sorts.Tests</AssemblyName>
+    <RootNamespace>BasicAlgorithms.Tests</RootNamespace>
+    <AssemblyName>BasicAlgorithms.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -62,9 +62,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sorts\Sorts.csproj">
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BasicAlgorithms\BasicAlgorithms.csproj">
       <Project>{9abe64a9-005e-4208-91f8-d08973969769}</Project>
-      <Name>Sorts</Name>
+      <Name>BasicAlgorithms</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

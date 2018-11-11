@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Sorts.Tests
+namespace BasicAlgorithms.Tests
 {
     [TestClass]
     public class SortClassTests

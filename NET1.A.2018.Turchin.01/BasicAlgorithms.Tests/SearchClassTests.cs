@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Sorts.Tests
+namespace BasicAlgorithms.Tests
 {
 	[TestFixture]
 	class SearchTests

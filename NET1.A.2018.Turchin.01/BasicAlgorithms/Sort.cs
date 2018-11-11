@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Sorts
+namespace BasicAlgoritm
 {
 	/// <summary>
 	/// Represent the class, which contains Merge and Quick sort algorithms.
