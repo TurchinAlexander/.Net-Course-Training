@@ -14,7 +14,7 @@ namespace BasicAlgorithms
 
 			while (left <= right)
 			{
-				mid = (left + right) / 2;
+				mid = left + (right - left) / 2;
 				
 				if (comparer.Compare(value, array[mid]) > 0)
 				{
