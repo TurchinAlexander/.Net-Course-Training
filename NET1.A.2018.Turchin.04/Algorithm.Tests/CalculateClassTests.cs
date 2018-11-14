@@ -159,7 +159,7 @@ namespace Algorithm.Tests
 		[TestCaseSource("TestVerbal")]
 		public void TransformToWordsMethod_DoubleArray_ReturnStringArray(double[] numbers, string[] expected)
 		{
-			string[] result = numbers.TransformTo(new TransformerDoubleToWord());
+			string[] result = numbers.TransformTo(new TransformerDoubleToWord()).ToArray();
 
 			Assert.IsTrue(Execute.CheckStringArrays(expected, result));
 		}
@@ -175,7 +175,7 @@ namespace Algorithm.Tests
 		[TestCaseSource("TestToBinary")]
 		public void TransformToBinary_DoubleArray_ReturnStringArray(double[] numbers, string[] expected)
 		{
-			string[] result = numbers.TransformTo(new TransformerDoubleToIEEEFormat());
+			string[] result = numbers.TransformTo(new TransformerDoubleToIEEEFormat()).ToArray();
 
 			Assert.IsTrue(Execute.CheckStringArrays(expected, result));
 		}
@@ -183,7 +183,7 @@ namespace Algorithm.Tests
 		[TestCaseSource("TestToBinary")]
 		public void TransformToBinary_DoubleArrayAndDelegate_ReturnStringArray(double[] numbers, string[] expected)
 		{
-			string[] actual = numbers.TransformTo(new TransformerDoubleToIEEEFormat().Transform);
+			string[] actual = numbers.TransformTo(new TransformerDoubleToIEEEFormat().Transform).ToArray();
 
 			Assert.IsTrue(Execute.CheckStringArrays(expected, actual));
 		}
@@ -191,7 +191,7 @@ namespace Algorithm.Tests
 		[TestCaseSource("StringFilterLowerCase")]
 		public void FilterExtension_StringLowerCaseFilter_FilteredArray(string[] numbers, string[] expected)
 		{
-			string[] actual = numbers.Filter(StringFilter.LowerCase);
+			string[] actual = numbers.Filter(StringFilter.LowerCase).ToArray();
 
 			Assert.IsTrue(Execute.CheckStringArrays(expected, actual));
 		}
@@ -199,7 +199,7 @@ namespace Algorithm.Tests
 		[TestCaseSource("IntFilterEven")]
 		public void FilterExtension_IntEvenFilter_FilteredArray(int[] numbers, int[] expected)
 		{
-			int[] actual = numbers.Filter(IntFilter.Even);
+			int[] actual = numbers.Filter(IntFilter.Even).ToArray();
 
 			CollectionAssert.AreEqual(expected, actual);
 		}
@@ -207,7 +207,7 @@ namespace Algorithm.Tests
 		[TestCaseSource("IntFilterNegative")]
 		public void FilterExtension_IntNegativeFilter_FilteredArray(int[] numbers, int[] expected)
 		{
-			int[] actual = numbers.Filter(IntFilter.Negative);
+			int[] actual = numbers.Filter(IntFilter.Negative).ToArray();
 
 			CollectionAssert.AreEqual(expected, actual);
 		}
@@ -215,7 +215,7 @@ namespace Algorithm.Tests
 		[TestCaseSource("IntFilterPrime")]
 		public void FilterExtension_IntPrimeFilter_FilteredArray(int[] numbers, int[] expected)
 		{
-			int[] actual = numbers.Filter(IntFilter.Prime);
+			int[] actual = numbers.Filter(IntFilter.Prime).ToArray();
 
 			CollectionAssert.AreEqual(expected, actual);
 		}

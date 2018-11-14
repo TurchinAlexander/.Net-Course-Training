@@ -98,45 +98,70 @@ namespace Algorithm
 
 	public static class ArrayExtensions
 	{
-		public static TResult[] TransformTo<TSource, TResult>(this TSource[] numbers, ITransformer<TSource, TResult> transformer)
+		public static IEnumerable<TResult> TransformTo<TSource, TResult>(
+			this IEnumerable<TSource> collection,
+			ITransformer<TSource, TResult> transformer)
 		{
-			return TransformTo(numbers, transformer.Transform);
+			return TransformTo(collection, transformer.Transform);
 		}
 
-		public static TResult[] TransformTo<TSource, TResult>(this TSource[] numbers, Func<TSource, TResult> transformer)
+		public static IEnumerable<TResult> TransformTo<TSource, TResult>(
+			this IEnumerable<TSource> collection,
+			Func<TSource, TResult> transformer)
 		{
-			InputValidation(numbers, transformer);
+			if (collection == null) throw new ArgumentNullException($"{nameof(collection)} cannot be null.");
+			if (transformer == null) throw new ArgumentNullException($"{nameof(transformer)} cannot be null");
 
-			TResult[] numbersInFormatView = new TResult[numbers.Length];
+			return Transformation();
 
-			for (int i = 0; i < numbers.Length; i++)
+			IEnumerable<TResult> Transformation()
 			{
-				numbersInFormatView[i] = transformer(numbers[i]);
+				foreach (var element in collection)
+				{
+					yield return transformer(element);
+				}
 			}
-
-			return numbersInFormatView;
 		}
 
-		public static TSource[] Filter<TSource>(this TSource[] array, Func<TSource, bool> filter)
+		public static IEnumerable<TSource> Filter<TSource>(
+			this IEnumerable<TSource> collection,
+			IFilter<TSource> filter)
 		{
-			if (array == null) throw new ArgumentNullException($"{nameof(array)} cannot be null.");
+			return Filter(collection, filter.IsValid);
+		}
+
+		public static IEnumerable<TSource> Filter<TSource>(
+			this IEnumerable<TSource> collection,
+			Func<TSource, bool> filter)
+		{
+			if (collection == null) throw new ArgumentNullException($"{nameof(collection)} cannot be null.");
 			if (filter == null) throw new ArgumentNullException($"{nameof(filter)} cannot be null");
 
-			List<TSource> validList = new List<TSource>();
+			return FilteredCollection();
 
-			foreach (TSource element in array)
+			IEnumerable<TSource> FilteredCollection()
 			{
-				if (filter(element))
-					validList.Add(element);
+				foreach (var element in collection)
+				{
+					if (filter(element))
+					{
+						yield return element;
+					}
+				}
 			}
-
-			return validList.ToArray();
 		}
 
-		private static void InputValidation<TSource, TResult>(TSource[] numbers, Func<TSource, TResult> tranformer)
+		public static TSource[] ToArray<TSource>(
+			this IEnumerable<TSource> collection)
 		{
-			if (numbers == null) throw new ArgumentNullException($"{nameof(numbers)} cannot be null.");
-			if (tranformer == null) throw new ArgumentNullException($"{nameof(tranformer)} cannot be null");
+			List<TSource> result = new List<TSource>();
+
+			foreach(var element in collection)
+			{
+				result.Add(element);
+			}
+
+			return result.ToArray();
 		}
 	}	
 }

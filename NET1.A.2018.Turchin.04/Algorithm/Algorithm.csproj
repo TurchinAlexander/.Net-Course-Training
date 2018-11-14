@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Calculate.cs" />
     <Compile Include="GCD.cs" />
+    <Compile Include="Interfaces\IFilter.cs" />
     <Compile Include="Interfaces\ITransformer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
