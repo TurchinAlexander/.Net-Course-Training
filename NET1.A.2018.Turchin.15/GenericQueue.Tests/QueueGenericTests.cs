@@ -83,7 +83,7 @@ namespace GenericQueue.Tests
 		}
 
 		[Test]
-		public void ContainsMethod_QueueWithThreeIntElements_ElementIsInNotQueue()
+		public void ContainsMethod_QueueWithThreeIntElements_ElementIsNotInQueue()
 		{
 			QueueGeneric<int> queue = new QueueGeneric<int>(new int[] { 1, 5, 7 });
 
@@ -91,7 +91,7 @@ namespace GenericQueue.Tests
 		}
 
 		[Test]
-		public void ContainsMethod_QueueWithTwoPersonInfo_ElementIsNotFound()
+		public void ContainsMethod_QueueWithTwoPersonInfo_ElementIsNotFoundByValues()
 		{
 			PersonInfo[] array = new PersonInfo[]
 			{
@@ -101,12 +101,11 @@ namespace GenericQueue.Tests
 
 			QueueGeneric<PersonInfo> queue = new QueueGeneric<PersonInfo>(array);
 
-			Assert.IsTrue(queue.Contains(array[0]));
 			Assert.IsFalse(queue.Contains(new PersonInfo { Name = "Jonh", Surname = "Newman" }));
 		}
 
 		[Test]
-		public void ContainsMethod_QueueWithTwoPersonInfoEquatable_ElementIsNotFound()
+		public void ContainsMethod_QueueWithTwoPersonInfoEquatable_ElementIsFoundByIEquatableEquals()
 		{
 			PersonInfoEquatable[] array = new PersonInfoEquatable[]
 			{
@@ -121,7 +120,7 @@ namespace GenericQueue.Tests
 		}
 
 		[Test]
-		public void ContainsMethod_QueueWithTwoPersonInfoObjectEquals_ElementIsNotFound()
+		public void ContainsMethod_QueueWithTwoPersonInfoObjectEquals_ElementIsFoundByOverrideObjectEquals()
 		{
 			PersonInfoObjectEquals[] array = new PersonInfoObjectEquals[]
 			{
