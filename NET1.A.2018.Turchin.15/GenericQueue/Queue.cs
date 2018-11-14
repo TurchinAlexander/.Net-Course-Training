@@ -19,6 +19,11 @@ namespace GenericQueue
 		private const int _standardSize = 5;
 
 		/// <summary>
+		/// Get count of elements in the queue.
+		/// </summary>
+		public int Count { get => _size; }
+
+		/// <summary>
 		/// Creation of the queue.
 		/// </summary>
 		public QueueGeneric()
@@ -130,6 +135,19 @@ namespace GenericQueue
 		}
 
 		/// <summary>
+		/// Clear the queue.
+		/// </summary>
+		public void Clear()
+		{
+			Array.Clear(_array, 0, _array.Length);
+
+			_head = 0;
+			_tail = 0;
+			_size = 0;
+			++_version;
+		}
+
+		/// <summary>
 		/// Take element from the queue by index.
 		/// </summary>
 		/// <param name="index">The index form the queue</param>
@@ -222,7 +240,7 @@ namespace GenericQueue
 		/// </summary>
 		public struct Enumerator : IEnumerator<T>, IEnumerator, IDisposable
 		{
-			private QueueGeneric<T> _q;
+			private QueueGeneric<T> _queue;
 			private int _version;
 			private int _index;
 
@@ -231,11 +249,11 @@ namespace GenericQueue
 			/// <summary>
 			/// Creation of the enumerator.
 			/// </summary>
-			/// <param name="q"><see cref="QueueGeneric{T}"/>.</param>
-			public Enumerator(QueueGeneric<T> q)
+			/// <param name="queue"><see cref="QueueGeneric{T}"/>.</param>
+			public Enumerator(QueueGeneric<T> queue)
 			{
-				_q = q;
-				_version = q._version;
+				_queue = queue;
+				_version = queue._version;
 				_index = -1;
 
 				_currentElement = default(T);
@@ -274,22 +292,22 @@ namespace GenericQueue
 			/// <returns><c>true</c> if we can move. Otherwise, <c>false</c>.</returns>
 			public bool MoveNext()
 			{
-				if (_version != _q._version)
-					throw new InvalidOperationException($"The {this._version} differs from {_q._version}");
+				if (_version != _queue._version)
+					throw new InvalidOperationException($"The {this._version} differs from {_queue._version}");
 
 				if (_index == -2)
 					return false;
 
 				++_index;
 
-				if (_index == _q._size)
+				if (_index == _queue._size)
 				{
 					_index = -2;
 					_currentElement = default(T);
 					return false;
 				}
 
-				_currentElement = _q.GetElement(_index);
+				_currentElement = _queue.GetElement(_index);
 				return true;
 			}
 
