@@ -61,16 +61,13 @@ namespace BinarySearchTreeTask
 		/// <param name="item">The item, which should be added.</param>
 		public void Add(T item)
 		{
-			if (this.Contains(item))
-				return;
-
 			Node prev = null;
 			Node temp = root;
 			while (temp != null)
 			{
 				int resultComparison = comparer.Compare(item, temp.value);
 				prev = temp;
-				temp = (resultComparison > 0)
+				temp = (resultComparison >= 0)
 					? temp.rightNode
 					: temp.leftNode;
 			}
@@ -78,7 +75,7 @@ namespace BinarySearchTreeTask
 			temp = new Node(item);
 			if (prev != null)
 			{
-				if (comparer.Compare(item, prev.value) > 0)
+				if (comparer.Compare(item, prev.value) >= 0)
 				{
 					prev.rightNode = temp;
 				}
