@@ -12,6 +12,8 @@ namespace StreamsDemo
 
     public static class StreamsExtension
     {
+		private static Encoding encoding = Encoding.GetEncoding("iso-8859-1");
+
         public static int ByByteCopy(string sourcePath, string destinationPath)
         {
 			InputValidation(sourcePath, destinationPath);
@@ -43,15 +45,13 @@ namespace StreamsDemo
 
 			string fileText = streamReader.ReadToEnd();
 			byte[] writeByteArray = new byte[1];
-			int offset = 0;
 			int totalBytes = 0;
 			
-			MemoryStream memoryStream = new MemoryStream(Encoding.Unicode.GetBytes(fileText));
+			MemoryStream memoryStream = new MemoryStream(encoding.GetBytes(fileText));
 
-			while(memoryStream.Read(writeByteArray, offset, sizeof(byte)) != 0)
+			while(memoryStream.Read(writeByteArray, 0, 1) > 0)
 			{
-				streamWriter.Write(Encoding.Unicode.GetChars(writeByteArray));
-				offset += sizeof(byte);
+				streamWriter.Write(encoding.GetChars(writeByteArray));
 				totalBytes++;
 			}
 
@@ -104,11 +104,11 @@ namespace StreamsDemo
 			int offset = 0;
 			int totalBytes = 0;
 
-			MemoryStream memoryStream = new MemoryStream(Encoding.Unicode.GetBytes(fileText));
+			MemoryStream memoryStream = new MemoryStream(encoding.GetBytes(fileText));
 
 			while ((bytesRead = memoryStream.Read(writeByteArray, offset, bufferSize)) > 0)
 			{
-				streamWriter.Write(Encoding.Unicode.GetChars(writeByteArray));
+				streamWriter.Write(encoding.GetChars(writeByteArray));
 				offset += bytesRead;
 				totalBytes += bytesRead;
 			}
@@ -187,7 +187,7 @@ namespace StreamsDemo
 				isEqual = firstString.Equals(secondString);
 			}
 
-			if (sourceReader.EndOfStream || destinationReader.EndOfStream)
+			if (!sourceReader.EndOfStream || !destinationReader.EndOfStream)
 			{
 				isEqual = false;
 			}
@@ -200,14 +200,20 @@ namespace StreamsDemo
 
 		private static void InputValidation(string sourcePath, string destinationPath)
 		{
-			if (!Directory.Exists(Path.GetDirectoryName(sourcePath)))
-				throw new ArgumentException($"There is no such directory {Path.GetDirectoryName(sourcePath)}");
+			if (sourcePath == null)
+				throw new ArgumentNullException(nameof(sourcePath));
+
+			if (destinationPath == null)
+				throw new ArgumentNullException(nameof(destinationPath));
+
+			/*if (!Directory.Exists(Path.GetDirectoryName(sourcePath)))
+				throw new ArgumentException($"There is no such directory {Path.GetDirectoryName(sourcePath)}");*/
 
 			if (!File.Exists(sourcePath))
 				throw new ArgumentException($"There is no such file with that name {Path.GetFileName(sourcePath)}");
 
-			if (!Directory.Exists(Path.GetDirectoryName(destinationPath)))
-				throw new ArgumentException($"There is no such directory {Path.GetDirectoryName(sourcePath)}");
+			/*if (!Directory.Exists(Path.GetDirectoryName(destinationPath)))
+				throw new ArgumentException($"There is no such directory {Path.GetDirectoryName(sourcePath)}");*/
 		}
     }
 }
