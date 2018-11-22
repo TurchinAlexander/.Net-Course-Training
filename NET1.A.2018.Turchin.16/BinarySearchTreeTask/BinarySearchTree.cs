@@ -10,40 +10,39 @@ namespace BinarySearchTreeTask
 	public class BinarySearchTree<T> : ICollection<T>, IEnumerable<T>, IEnumerable
 	{
 		private Node root = null;
-		private Comparer<T> comparer;
+		private IComparer<T> comparer;
+		private int version = 0;
 
-		/// <summary>
-		/// Creation of the <see cref="BinarySearchTree{T}"/>.
-		/// </summary>
 		public BinarySearchTree()
 		{
-			this.comparer = Comparer<T>.Default;
+			if (typeof(IComparable).IsAssignableFrom(typeof(T)) ||
+				(typeof(IComparable<T>).IsAssignableFrom(typeof(T))))
+			{
+				comparer = Comparer<T>.Default;
+			}
+			else
+			{
+				throw new InvalidOperationException($"{nameof(T)} doesn't implement {nameof(IComparable)} or {nameof(IComparable<T>)}");
+			}
 		}
 
-		/// <summary>
-		/// Creation of the <see cref="BinarySearchTree{T}"/> of initial elements.
-		/// </summary>
-		/// <param name="collection"></param>
-		public BinarySearchTree(IEnumerable<T> collection)
+		public BinarySearchTree(IEnumerable<T> collection, IComparer<T> comparer)
 		{
-			this.comparer = Comparer<T>.Default;
+			this.comparer = comparer;
 			this.Add(collection);
 		}
 
-		/// <summary>
-		/// Creation of the <see cref="BinarySearchTree{T}"/> with <see cref="Comparer{T}"/>.
-		/// </summary>
-		/// <param name="thirdPartyComparer">The <see cref="Comparer{T}"/>.</param>
-		public BinarySearchTree(Comparer<T> thirdPartyComparer)
+		public BinarySearchTree(IEnumerable<T> collection) : this()
 		{
-			this.comparer = thirdPartyComparer;
-		}
-
-		public BinarySearchTree(IEnumerable<T> collection, Comparer<T> thirdPartyComparer)
-		{
-			this.comparer = thirdPartyComparer;
 			this.Add(collection);
 		}
+
+		public BinarySearchTree(IComparer<T> comparer)
+		{
+			this.comparer = comparer;
+		}
+
+		
 
 		/// <summary>
 		/// Count of elements in the <see cref="BinarySearchTree{T}"/>.
@@ -67,30 +66,17 @@ namespace BinarySearchTreeTask
 			{
 				int resultComparison = comparer.Compare(item, temp.value);
 				prev = temp;
-				temp = (resultComparison >= 0)
+				temp = (resultComparison > 0)
 					? temp.rightNode
 					: temp.leftNode;
 			}
 
 			temp = new Node(item);
-			if (prev != null)
-			{
-				if (comparer.Compare(item, prev.value) >= 0)
-				{
-					prev.rightNode = temp;
-				}
-				else
-				{
-					prev.leftNode = temp;
-				}
-			}
-
-			if (root == null)
-			{
-				root = temp;
-			}
+			SetConnection(prev, temp);
+			
 
 			this.Count++;
+			this.version++;
 		}
 
 		/// <summary>
@@ -115,6 +101,7 @@ namespace BinarySearchTreeTask
 		{
 			this.root = null;
 			this.Count = 0;
+			this.version++;
 		}
 
 		/// <summary>
@@ -128,18 +115,13 @@ namespace BinarySearchTreeTask
 			while(temp != null)
 			{
 				int resultComparison = comparer.Compare(item, temp.value);
-				if(resultComparison == 0)
-				{
+
+				if (resultComparison == 0)
 					return true;
-				}
-				else if(resultComparison > 0)
-				{
-					temp = temp.rightNode;
-				}
-				else
-				{
-					temp = temp.leftNode;
-				}
+
+				temp = (resultComparison > 0)
+					? temp = temp.rightNode
+					: temp = temp.leftNode;
 			}
 
 			return false;
@@ -154,7 +136,10 @@ namespace BinarySearchTreeTask
 			if (array.Length - arrayIndex < Count)
 				throw new ArgumentException($"{nameof(arrayIndex)} cannot be greater than {array.Length - Count}");
 
-			throw new NotImplementedException();
+			foreach(var element in this)
+			{
+				array[arrayIndex++] = element;
+			}
 		}
 
 		/// <summary>
@@ -163,26 +148,34 @@ namespace BinarySearchTreeTask
 		/// <returns>The <see cref="IEnumerator{T}"/>.</returns>
 		public IEnumerator<T> GetEnumerator()
 		{
-			foreach(T element in PreOrder(root))
-			{
-				yield return element;
-			}
+			int version = this.version;
+			return InOrder(root).GetEnumerator();
 
-			IEnumerable<T> PreOrder(Node current)
+			IEnumerable<T> InOrder(Node current)
 			{
-				if (current != null)
+				Node temp = root;
+				Stack<Node> stack = new Stack<Node>();
+
+				while (true)
 				{
-					foreach (T element in PreOrder(current.leftNode))
+					while ((temp != null) && (version == this.version))
 					{
-						yield return element;
+						stack.Push(temp);
+						temp = temp.leftNode;
 					}
 
-					yield return current.value;
-
-					foreach (T element in PreOrder(current.rightNode))
+					if (version != this.version)
 					{
-						yield return element;
+						throw new InvalidOperationException($"You cannot call {nameof(this.Add)} in foreach");
 					}
+
+					if (stack.Count == 0)
+						break;
+
+					temp = stack.Pop();
+					yield return temp.value;
+
+					temp = temp.rightNode;
 				}
 			}
 		}
@@ -214,20 +207,19 @@ namespace BinarySearchTreeTask
 			while (temp != null)
 			{
 				int resultComparison = comparer.Compare(item, temp.value);
+
 				if (resultComparison == 0)
 				{
 					RemoveLogic(temp);
 					this.Count--;
+					this.version++;
+
 					return true;
 				}
-				else if (resultComparison > 0)
-				{
-					temp = temp.rightNode;
-				}
-				else
-				{
-					temp = temp.leftNode;
-				}
+
+				temp = (resultComparison > 0)
+					? temp = temp.rightNode
+					: temp = temp.leftNode;
 			}
 
 			return false;
@@ -253,54 +245,71 @@ namespace BinarySearchTreeTask
 			currentNode = null;
 		}
 
-		public IEnumerable<T> InOrder()
+		public IEnumerable<T> PreOrder()
 		{
-			foreach(T element in InOrder(root))
-			{
-				yield return element;
-			}
+			int version = this.version;
+			return PreOrder(root);
 
-			IEnumerable<T> InOrder(Node current)
+			IEnumerable<T> PreOrder(Node current)
 			{
-				if (current != null)
+				Node temp = root;
+				Stack<Node> stack = new Stack<Node>();
+
+				while (true)
 				{
-					yield return current.value;
-
-					foreach (T element in InOrder(current.leftNode))
+					while ((temp != null) && (version == this.version))
 					{
-						yield return element;
+						yield return temp.value;
+
+						stack.Push(temp);
+						temp = temp.leftNode;
 					}
 
-					foreach (T element in InOrder(current.rightNode))
+					if (version != this.version)
 					{
-						yield return element;
+						throw new InvalidOperationException($"You cannot call {nameof(this.Add)} in foreach");
 					}
+
+					if (stack.Count == 0)
+						break;
+
+					temp = stack.Pop();
+					temp = temp.rightNode;
 				}
 			}
 		}
 
 		public IEnumerable<T> PostOrder()
 		{
-			foreach (T element in PostOrder(root))
-			{
-				yield return element;
-			}
+			int version = this.version;
+			return PostOrder(root);
 
 			IEnumerable<T> PostOrder(Node current)
 			{
-				if (current != null)
-				{ 
-					foreach (T element in PostOrder(current.leftNode))
+				Node temp = root;
+				Stack<Node> stack = new Stack<Node>();
+
+				while (true)
+				{
+					while ((temp != null) && (version == this.version))
 					{
-						yield return element;
+						stack.Push(temp);
+						temp = temp.leftNode;
 					}
 
-					foreach (T element in PostOrder(current.rightNode))
+					if (version != this.version)
 					{
-						yield return element;
+						throw new InvalidOperationException($"You cannot call {nameof(this.Add)} in foreach");
 					}
 
-					yield return current.value;
+					if (stack.Count == 0)
+						break;
+
+					temp = stack.Pop();
+					temp = temp.rightNode;
+
+					if (temp != null)
+						yield return temp.value;
 				}
 			}
 		}
@@ -319,6 +328,26 @@ namespace BinarySearchTreeTask
 				this.value = value;
 				rightNode = null;
 				leftNode = null;
+			}
+		}
+
+		private void SetConnection(Node prev, Node temp)
+		{
+			if (prev != null)
+			{
+				if (comparer.Compare(temp.value, prev.value) > 0)
+				{
+					prev.rightNode = temp;
+				}
+				else
+				{
+					prev.leftNode = temp;
+				}
+			}
+			else
+			{
+				prev = temp;
+				root = prev;
 			}
 		}
 	}
