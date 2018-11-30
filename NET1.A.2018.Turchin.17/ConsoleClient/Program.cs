@@ -8,8 +8,9 @@ namespace ConsoleClient
     {
         static void Main(string[] args)
         {
-			string source = "SourceText.txt";
-			string destinationFileStream = "OutputTextFileStream.txt";
+            //string source = "SourceText.txt";
+            string source = "SourceText.txt";
+            string destinationFileStream = "OutputTextFileStream.txt";
 			string destinationMemoryStream = "OutputTextMemoryStream.txt";
 
 			Console.WriteLine($"ByteCopy() done. Total bytes: {ByByteCopy(source, destinationFileStream)}");
