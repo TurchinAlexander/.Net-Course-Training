@@ -8,11 +8,11 @@ namespace Matrixes.DataEvent
 {
     public class DataEventArgs : EventArgs
     {
-        public string message;
+        public string Message { get; }
 
         public DataEventArgs(string message)
         {
-            this.message = message;
+            this.Message = message;
         }
     }
 }
