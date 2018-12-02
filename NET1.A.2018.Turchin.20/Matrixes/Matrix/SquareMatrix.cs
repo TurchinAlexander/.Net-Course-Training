@@ -28,17 +28,8 @@ namespace Matrixes.Matrix
         /// Create a matrix with values from array.
         /// </summary>
         /// <param name="array"></param>
-        public SquareMatrix(T[,] array)
+        public SquareMatrix(T[,] array) : base(array)
         {
-            int root = (int)Math.Sqrt(array.Length);
-
-            if (array.Length - root * root > 0.01)
-            {
-                throw new ArgumentException(nameof(array));
-            }
-
-            this.Size = root;
-            this.matrixArray = array;
         }
 
         /// <summary>
@@ -49,9 +40,7 @@ namespace Matrixes.Matrix
         /// <returns>New <see cref="SquareMatrix{T}"/>.</returns>
         public static SquareMatrix<T> operator +(SquareMatrix<T> squareA, SquareMatrix<T> squareB)
         {
-            CheckSize(squareA, squareB);
-
-            return NewMatrix(squareA, squareB);
+            return CreateNewMatrix(squareA, squareB); ;
         }
 
         /// <summary>
@@ -62,9 +51,7 @@ namespace Matrixes.Matrix
         /// <returns>New <see cref="SquareMatrix{T}"/>.</returns>
         public static SquareMatrix<T> operator +(SquareMatrix<T> square, SymmetricMatrix<T> symmetric)
         {
-            CheckSize(square, symmetric);
-
-            return NewMatrix(square, symmetric);
+            return CreateNewMatrix(square, symmetric);
         }
 
         /// <summary>
@@ -75,9 +62,7 @@ namespace Matrixes.Matrix
         /// <returns>New <see cref="SquareMatrix{T}"/>.</returns>
         public static SquareMatrix<T> operator +(SquareMatrix<T> square, DiagonalMatrix<T> diagonal)
         {
-            CheckSize(square, diagonal);
-
-            return NewMatrix(square, diagonal);
+            return CreateNewMatrix(square, diagonal);
         }
 
         /// <summary>
@@ -91,27 +76,18 @@ namespace Matrixes.Matrix
             matrixArray[i, j] = value;
         }
 
-        private static SquareMatrix<T> NewMatrix(BaseMatrix<T> matrixA, BaseMatrix<T> matrixB)
+        protected override void CustomCheckArray(T[,] array)
         {
-            SquareMatrix<T> result = new SquareMatrix<T>(matrixA.Size);
-
-            for (int i = 0; i < matrixA.Size; i++)
-            {
-                for (int j = 0; j < matrixA.Size; j++)
-                {
-                    result[i, j] = (dynamic)matrixA[i, j] + (dynamic)matrixB[i, j];
-                }
-            }
-
-            return result;
         }
 
-        private static void CheckSize(BaseMatrix<T> a, BaseMatrix<T> b)
+        private static SquareMatrix<T> CreateNewMatrix(BaseMatrix<T> matrixA, BaseMatrix<T> matrixB)
         {
-            if (a.Size != b.Size)
-            {
-                throw new InvalidOperationException($"Matrixes have different sizes");
-            }
+            CheckMatrixSize(matrixA, matrixB);
+
+            SquareMatrix<T> matrixResult = new SquareMatrix<T>(matrixA.Size);
+            NewMatrix(matrixResult, matrixA, matrixB);
+
+            return matrixResult;
         }
     }
 }

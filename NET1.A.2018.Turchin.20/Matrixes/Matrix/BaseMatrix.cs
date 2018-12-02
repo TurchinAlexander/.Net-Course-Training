@@ -28,7 +28,6 @@ namespace Matrixes.Matrix
         public BaseMatrix() : this(defaultSize)
         {
         }
-
         /// <summary>
         /// Create a matrix of concrete size.
         /// </summary>
@@ -43,6 +42,15 @@ namespace Matrixes.Matrix
 
             this.Size = size;
             matrixArray = new T[this.Size, this.Size];
+        }
+
+        public BaseMatrix(T[,] array)
+        {
+            CheckArray(array);
+
+            int root = (int)Math.Sqrt(array.Length);
+            this.Size = root;
+            this.matrixArray = array;
         }
 
         /// <summary>
@@ -70,14 +78,6 @@ namespace Matrixes.Matrix
         }
 
         /// <summary>
-        /// Method to set value to the matrix element.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="i">The number of the string.</param>
-        /// <param name="j">The number of the row.</param>
-        protected abstract void SetValue(T value, int i, int j);
-
-        /// <summary>
         /// Method to call event of setting the value.
         /// </summary>
         /// <param name="i">The number of the string.</param>
@@ -87,6 +87,44 @@ namespace Matrixes.Matrix
             string message = $"The element[{i},{j}] has been changed.";
 
             OnChanged(this, new DataEventArgs(message));
+        }
+
+        /// <summary>
+        /// Method to set value to the matrix element.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="i">The number of the string.</param>
+        /// <param name="j">The number of the row.</param>
+        protected abstract void SetValue(T value, int i, int j);
+        protected abstract void CustomCheckArray(T[,] array);
+
+        protected static void NewMatrix(BaseMatrix<T> result, BaseMatrix<T> matrixA, BaseMatrix<T> matrixB)
+        {
+            for (int i = 0; i < matrixA.Size; i++)
+            {
+                for (int j = 0; j < matrixA.Size; j++)
+                {
+                    result.matrixArray[i, j] = (dynamic)matrixA[i, j] + (dynamic)matrixB[i, j];
+                }
+            }
+        }
+
+        protected static void CheckMatrixSize(BaseMatrix<T> a, BaseMatrix<T> b)
+        {
+            if (a.Size != b.Size)
+            {
+                throw new InvalidOperationException($"Matrixes have different sizes");
+            }
+        }
+
+        private void CheckArray(T[,] array)
+        {
+            int root = (int)Math.Sqrt(array.Length);
+
+            if (array.Length - root * root > 0.01)
+            {
+                throw new ArgumentException(nameof(array));
+            }
         }
 
         private void ValidateIndexes(int i, int j)

@@ -28,19 +28,8 @@ namespace Matrixes.Matrix
         /// </summary>
         /// <param name="array"></param>
         /// <exception cref="InvalidCastException">if array is not symmetric.</exception>
-        public SymmetricMatrix(T[,] array)
+        public SymmetricMatrix(T[,] array) : base(array)
         {
-            int root = (int)Math.Sqrt(array.Length);
-
-            if (array.Length - root * root > 0.01)
-            {
-                throw new ArgumentException(nameof(array));
-            }
-
-            CheckArray(array, root);
-
-            this.Size = root;
-            this.matrixArray = array;
         }
 
         /// <summary>
@@ -51,9 +40,7 @@ namespace Matrixes.Matrix
         /// <returns>New <see cref="SymmetricMatrix{T}"/>.</returns>
         public static SymmetricMatrix<T> operator +(SymmetricMatrix<T> symmetricA, SymmetricMatrix<T> symmetricB)
         {
-            CheckSize(symmetricA, symmetricB);
-
-            return NewMatrix(symmetricA, symmetricB);
+            return CreateNewMatrix(symmetricA, symmetricB);
         }
 
         /// <summary>
@@ -64,9 +51,7 @@ namespace Matrixes.Matrix
         /// <returns>New <see cref="SymmetricMatrix{T}"/>.</returns>
         public static SymmetricMatrix<T> operator +(SymmetricMatrix<T> symmetric, DiagonalMatrix<T> diagonal)
         {
-            CheckSize(symmetric, diagonal);
-
-            return NewMatrix(symmetric, diagonal);
+            return CreateNewMatrix(symmetric, diagonal);
         }
 
         /// <summary>
@@ -79,6 +64,24 @@ namespace Matrixes.Matrix
         {
             matrixArray[i, j] = value;
             matrixArray[j, i] = value;
+        }
+
+        protected override void CustomCheckArray(T[,] array)
+        {
+            int root = (int)Math.Sqrt(array.Length);
+
+            for (int i = 0; i < root; i++)
+            {
+                for (int j = 0; j < root; j++)
+                {
+                    dynamic temp1 = array[i, j];
+                    dynamic temp2 = array[j, i];
+                    if (!temp1.Equals(temp2))
+                    {
+                        throw new ArgumentException(nameof(array));
+                    }
+                }
+            }
         }
 
         private static SymmetricMatrix<T> NewMatrix(BaseMatrix<T> matrixA, BaseMatrix<T> matrixB)
@@ -96,28 +99,15 @@ namespace Matrixes.Matrix
             return result;
         }
 
-        private void CheckArray(T[,] array, int length)
+        private static SymmetricMatrix<T> CreateNewMatrix(BaseMatrix<T> matrixA, BaseMatrix<T> matrixB)
         {
-            for (int i = 0; i < length; i++)
-            {
-                for (int j = 0; j < length; j++)
-                {
-                    dynamic temp1 = array[i, j];
-                    dynamic temp2 = array[j, i];
-                    if (!temp1.Equals(temp2))
-                    {
-                        throw new ArgumentException(nameof(array));
-                    }
-                }
-            }
+            CheckMatrixSize(matrixA, matrixB);
+
+            SymmetricMatrix<T> matrixResult = new SymmetricMatrix<T>(matrixA.Size);
+            NewMatrix(matrixResult, matrixA, matrixB);
+
+            return matrixResult;
         }
 
-        private static void CheckSize(BaseMatrix<T> a, BaseMatrix<T> b)
-        {
-            if (a.Size != b.Size)
-            {
-                throw new InvalidOperationException($"Matrixes have different sizes");
-            }
-        }
     }
 }

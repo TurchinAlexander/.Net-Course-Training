@@ -28,19 +28,8 @@ namespace Matrixes.Matrix
         /// </summary>
         /// <param name="array"></param>
         /// <exception cref="InvalidCastException">if array is not symmetric.</exception>
-        public DiagonalMatrix(T[,] array)
+        public DiagonalMatrix(T[,] array) : base(array)
         {
-            int root = (int)Math.Sqrt(array.Length);
-
-            if (array.Length - root * root > 0.01)
-            {
-                throw new ArgumentException(nameof(array));
-            }
-
-            CheckArray(array, root);
-
-            this.Size = root;
-            this.matrixArray = array;
         }
 
         /// <summary>
@@ -51,9 +40,7 @@ namespace Matrixes.Matrix
         /// <returns>New <see cref="SymmetricMatrix{T}"/>.</returns>
         public static DiagonalMatrix<T> operator +(DiagonalMatrix<T> diagonalA, DiagonalMatrix<T> diagonalB)
         {
-            CheckSize(diagonalA, diagonalB);
-
-            return NewMatrix(diagonalA, diagonalB);
+            return CreateNewMatrix(diagonalA, diagonalB);
         }
 
         /// <summary>
@@ -72,23 +59,13 @@ namespace Matrixes.Matrix
             matrixArray[i, j] = value;
         }
 
-        private static DiagonalMatrix<T> NewMatrix(BaseMatrix<T> matrixA, BaseMatrix<T> matrixB)
+        protected override void CustomCheckArray(T[,] array)
         {
-            DiagonalMatrix<T> result = new DiagonalMatrix<T>(matrixA.Size);
+            int root = (int)Math.Sqrt(array.Length);
 
-            for (int i = 0; i < matrixA.Size; i++)
+            for (int i = 0; i < root; i++)
             {
-                    result[i, i] = (dynamic)matrixA[i, i] + (dynamic)matrixB[i, i];
-            }
-
-            return result;
-        }
-
-        private void CheckArray(T[,] array, int length)
-        {
-            for (int i = 0; i < length; i++)
-            {
-                for (int j = 0; j < length; j++)
+                for (int j = 0; j < root; j++)
                 {
                     if ((i != j) && !array[i, j].Equals(default(T)))
                     {
@@ -98,12 +75,14 @@ namespace Matrixes.Matrix
             }
         }
 
-        private static void CheckSize(BaseMatrix<T> a, BaseMatrix<T> b)
+        private static DiagonalMatrix<T> CreateNewMatrix(BaseMatrix<T> matrixA, BaseMatrix<T> matrixB)
         {
-            if (a.Size != b.Size)
-            {
-                throw new InvalidOperationException($"Matrixes have different sizes");
-            }
+            CheckMatrixSize(matrixA, matrixB);
+
+            DiagonalMatrix<T> matrixResult = new DiagonalMatrix<T>(matrixA.Size);
+            NewMatrix(matrixResult, matrixA, matrixB);
+
+            return matrixResult;
         }
     }
 }
