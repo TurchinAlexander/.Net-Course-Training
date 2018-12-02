@@ -70,14 +70,6 @@ namespace Matrixes.Matrix
         }
 
         /// <summary>
-        /// Method to set value to the matrix element.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="i">The number of the string.</param>
-        /// <param name="j">The number of the row.</param>
-        protected abstract void SetValue(T value, int i, int j);
-
-        /// <summary>
         /// Method to call event of setting the value.
         /// </summary>
         /// <param name="i">The number of the string.</param>
@@ -88,6 +80,14 @@ namespace Matrixes.Matrix
 
             OnChanged(this, new DataEventArgs(message));
         }
+
+        /// <summary>
+        /// Method to set value to the matrix element.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="i">The number of the string.</param>
+        /// <param name="j">The number of the row.</param>
+        protected abstract void SetValue(T value, int i, int j);
 
         private void ValidateIndexes(int i, int j)
         {
