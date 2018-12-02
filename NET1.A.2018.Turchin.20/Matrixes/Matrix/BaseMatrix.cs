@@ -47,6 +47,7 @@ namespace Matrixes.Matrix
         public BaseMatrix(T[,] array)
         {
             CheckArray(array);
+            CustomCheckArray(array);
 
             int root = (int)Math.Sqrt(array.Length);
             this.Size = root;
