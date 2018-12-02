@@ -8,7 +8,7 @@ using XmlParser.Parser;
 using XmlParser.Validator;
 namespace XmlParser
 {
-    public class ConfigurationModule : NinjectModule
+    public class ConfigurationModule1 : NinjectModule
     {
         public override void Load()
         {
