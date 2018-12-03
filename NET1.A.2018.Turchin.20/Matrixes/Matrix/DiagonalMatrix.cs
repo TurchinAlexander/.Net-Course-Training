@@ -27,7 +27,7 @@ namespace Matrixes.Matrix
         /// Create a matrix with values from array.
         /// </summary>
         /// <param name="array"></param>
-        /// <exception cref="InvalidCastException">if array is not symmetric.</exception>
+        /// <exception cref="InvalidCastException">if array is not diagonal.</exception>
         public DiagonalMatrix(T[,] array)
         {
             int root = (int)Math.Sqrt(array.Length);
@@ -48,7 +48,7 @@ namespace Matrixes.Matrix
         /// </summary>
         /// <param name="diagonalA">First <see cref="DiagonalMatrix{T}"/>.</param>
         /// <param name="diagonalB">Second <see cref="DiagonalMatrix{T}"/>.</param>
-        /// <returns>New <see cref="SymmetricMatrix{T}"/>.</returns>
+        /// <returns>New <see cref="DiagonalMatrix{T}{T}"/>.</returns>
         public static DiagonalMatrix<T> operator +(DiagonalMatrix<T> diagonalA, DiagonalMatrix<T> diagonalB)
         {
             CheckSize(diagonalA, diagonalB);

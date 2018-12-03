@@ -28,6 +28,7 @@ namespace Matrixes.Matrix
         /// Create a matrix with values from array.
         /// </summary>
         /// <param name="array"></param>
+        /// <exception cref="InvalidCastException">if array is not square.</exception>
         public SquareMatrix(T[,] array)
         {
             int root = (int)Math.Sqrt(array.Length);
