@@ -10,8 +10,7 @@ namespace Matrixes.Matrix
 {
     public abstract class BaseMatrix<T>
     {
-        private const int defaultSize = 5;
-        protected T[,] matrixArray;
+        protected const int defaultSize = 5;
 
         /// <summary>
         /// Size of the matrix
@@ -42,7 +41,6 @@ namespace Matrixes.Matrix
             }
 
             this.Size = size;
-            matrixArray = new T[this.Size, this.Size];
         }
 
         /// <summary>
@@ -58,7 +56,7 @@ namespace Matrixes.Matrix
             {
                 ValidateIndexes(i, j);
 
-                return matrixArray[i, j];
+                return GetValue(i, j);
             }
 
             set
@@ -88,6 +86,14 @@ namespace Matrixes.Matrix
         /// <param name="i">The number of the string.</param>
         /// <param name="j">The number of the row.</param>
         protected abstract void SetValue(T value, int i, int j);
+
+        /// <summary>
+        /// Method to get value from the matrix.
+        /// </summary>
+        /// <param name="i">Index of the row.</param>
+        /// <param name="j">Index of the column.</param>
+        /// <returns>The value of <see cref="T"/>.</returns>
+        protected abstract T GetValue(int i, int j);
 
         private void ValidateIndexes(int i, int j)
         {

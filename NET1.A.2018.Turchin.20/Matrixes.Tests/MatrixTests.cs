@@ -52,11 +52,11 @@ namespace Matrixes.Tests
             matrix2[0, 0] = 1;
             matrix2[0, 1] = 2;
 
-            var matrix = matrix1 + matrix2;
+            matrix1.Add(matrix2);
 
             int[] array = { 2, 2, 0, 0 };
 
-            Assert.IsTrue(IsEqual(matrix, array));
+            Assert.IsTrue(IsEqual(matrix1, array));
         }
 
         [Test]
@@ -69,11 +69,11 @@ namespace Matrixes.Tests
             matrix2[0, 0] = 1;
             matrix2[1, 1] = 2;
 
-            var matrix = matrix1 + matrix2;
+            matrix1.Add(matrix2);
 
             int[] array = { 2, 0, 0, 2 };
 
-            Assert.IsTrue(IsEqual(matrix, array));
+            Assert.IsTrue(IsEqual(matrix1, array));
         }
 
         [Test]
@@ -87,11 +87,11 @@ namespace Matrixes.Tests
             matrix2[0, 0] = 1;
             matrix2[1, 1] = 2;
 
-            var matrix = matrix1 + matrix2;
+            matrix1.Add(matrix2);
 
             int[] array = { 1, 0, 2, 4 };
 
-            Assert.IsTrue(IsEqual(matrix, array));
+            Assert.IsTrue(IsEqual(matrix1, array));
         }
 
         [Test]
@@ -105,11 +105,11 @@ namespace Matrixes.Tests
             matrix2[0, 0] = 1;
             matrix2[1, 1] = 2;
 
-            var matrix = matrix1 + matrix2;
+            matrix1.Add(matrix2);
 
             int[] array = { 2, 0, 0, 4 };
 
-            Assert.IsTrue(IsEqual(matrix, array));
+            Assert.IsTrue(IsEqual(matrix1, array));
         }
 
         [Test]
@@ -121,11 +121,11 @@ namespace Matrixes.Tests
             matrix2[0, 0] = 1;
             matrix2[1, 1] = 1;
 
-            var matrix = matrix1 + matrix2;
+            matrix1.Add(matrix2);
 
             int[] array = { 2, 2, 2, 2 };
 
-            Assert.IsTrue(IsEqual(matrix, array));
+            Assert.IsTrue(IsEqual(matrix1, array));
         }
 
         [Test]
@@ -134,11 +134,11 @@ namespace Matrixes.Tests
             var matrix1 = new SymmetricMatrix<int>(new int[,] { { 1, 2 }, { 2, 1 } });
             var matrix2 = new SymmetricMatrix<int>(new int[,] { { 1, 2 }, { 2, 1 } });
 
-            var matrix = matrix1 + matrix2;
+            matrix1.Add(matrix2);
 
             int[] array = { 2, 4, 4, 2 };
 
-            Assert.IsTrue(IsEqual(matrix, array));
+            Assert.IsTrue(IsEqual(matrix1, array));
         }
 
         [Test]
@@ -166,9 +166,8 @@ namespace Matrixes.Tests
         {
             var matrix1 = new SquareMatrix<int>(2);
             var matrix2 = new SquareMatrix<int>(3);
-            SquareMatrix<int> matrix;
 
-            Assert.Throws<InvalidOperationException>(() => matrix = matrix1 + matrix2);
+            Assert.Throws<InvalidOperationException>(() => matrix1.Add(matrix2));
         }
 
         [Test]

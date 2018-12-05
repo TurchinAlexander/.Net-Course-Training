@@ -8,11 +8,14 @@ namespace Matrixes.Matrix
 {
     public class SymmetricMatrix<T> : BaseMatrix<T>
     {
+        private T[][] matrixArray;
+
         /// <summary>
         /// Constructor without parameters.
         /// </summary>
         public SymmetricMatrix() : base()
         {
+            matrixArray = CreateJaggedArray(defaultSize);
         }
 
         /// <summary>
@@ -21,6 +24,7 @@ namespace Matrixes.Matrix
         /// <param name="size">The size of matrix.</param>
         public SymmetricMatrix(int size) : base(size)
         {
+            matrixArray = CreateJaggedArray(size);
         }
 
         /// <summary>
@@ -30,43 +34,10 @@ namespace Matrixes.Matrix
         /// <exception cref="InvalidCastException">if array is not symmetric.</exception>
         public SymmetricMatrix(T[,] array)
         {
-            int root = (int)Math.Sqrt(array.Length);
+            CheckArray(array);
 
-            if (array.Length - root * root > 0.01)
-            {
-                throw new ArgumentException(nameof(array));
-            }
-
-            CheckArray(array, root);
-
-            this.Size = root;
-            this.matrixArray = array;
-        }
-
-        /// <summary>
-        /// Sum between one <see cref="SymmetricMatrix{T}"/> with another <see cref="SymmetricMatrix{T}"/>.
-        /// </summary>
-        /// <param name="symmetricA">First <see cref="SymmetricMatrix{T}"/>.</param>
-        /// <param name="symmetricB">Second <see cref="DiaSymmetricMatrixgonalMatrix{T}"/>.</param>
-        /// <returns>New <see cref="SymmetricMatrix{T}"/>.</returns>
-        public static SymmetricMatrix<T> operator +(SymmetricMatrix<T> symmetricA, SymmetricMatrix<T> symmetricB)
-        {
-            CheckSize(symmetricA, symmetricB);
-
-            return NewMatrix(symmetricA, symmetricB);
-        }
-
-        /// <summary>
-        /// Sum between one <see cref="SymmetricMatrix{T}"/> with another <see cref="SymmetricMatrix{T}"/>.
-        /// </summary>
-        /// <param name="square"><see cref="SymmetricMatrix{T}"/>.</param>
-        /// <param name="diagonal"><see cref="DiagonalMatrix{T}"/>.</param>
-        /// <returns>New <see cref="SymmetricMatrix{T}"/>.</returns>
-        public static SymmetricMatrix<T> operator +(SymmetricMatrix<T> symmetric, DiagonalMatrix<T> diagonal)
-        {
-            CheckSize(symmetric, diagonal);
-
-            return NewMatrix(symmetric, diagonal);
+            this.Size = array.GetLength(0);
+            this.matrixArray = TakeSymmetricArray(array);
         }
 
         /// <summary>
@@ -77,33 +48,40 @@ namespace Matrixes.Matrix
         /// <param name="j">The number of the row.</param>
         protected override void SetValue(T value, int i, int j)
         {
-            matrixArray[i, j] = value;
-            matrixArray[j, i] = value;
-        }
-
-        private static SymmetricMatrix<T> NewMatrix(BaseMatrix<T> matrixA, BaseMatrix<T> matrixB)
-        {
-            SymmetricMatrix<T> result = new SymmetricMatrix<T>(matrixA.Size);
-
-            for (int i = 0; i < matrixA.Size; i++)
+            if (i > j)
             {
-                for (int j = 0; j < matrixA.Size; j++)
-                {
-                    result[i, j] = (dynamic)matrixA[i, j] + (dynamic)matrixB[i, j];
-                }
+                Swap(ref i, ref j);
             }
 
-            return result;
+            matrixArray[i][j - i] = value;
         }
 
-        private void CheckArray(T[,] array, int length)
+        protected override T GetValue(int i, int j)
         {
-            for (int i = 0; i < length; i++)
+            if (i > j)
             {
-                for (int j = 0; j < length; j++)
+                Swap(ref i, ref j);
+            }
+
+            return matrixArray[i][j - i];
+        }
+
+        private void Swap(ref int a, ref int b)
+        {
+            int temp = a;
+            a = b;
+            b = temp;
+        }
+
+        private void CheckArray(T[,] array)
+        {
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(0); j++)
                 {
                     dynamic temp1 = array[i, j];
                     dynamic temp2 = array[j, i];
+
                     if (!temp1.Equals(temp2))
                     {
                         throw new ArgumentException(nameof(array));
@@ -112,12 +90,31 @@ namespace Matrixes.Matrix
             }
         }
 
-        private static void CheckSize(BaseMatrix<T> a, BaseMatrix<T> b)
+        private T[][] CreateJaggedArray(int length)
         {
-            if (a.Size != b.Size)
+            T[][] result = new T[length][];
+
+            for (int i = 0; i < length; i++)
             {
-                throw new InvalidOperationException($"Matrixes have different sizes");
+                result[i] = new T[length - i];
             }
+
+            return result;
+        }
+
+        private T[][] TakeSymmetricArray(T[,] array)
+        {
+            T[][] result = CreateJaggedArray(array.GetLength(0));
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                for (int j = 0; j < result[i].Length; j++)
+                {
+                    result[i][j] = array[i, i + j];
+                }
+            }
+
+            return result;
         }
     }
 }

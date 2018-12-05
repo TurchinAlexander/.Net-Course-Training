@@ -44,6 +44,7 @@
     <Compile Include="DataEvent\DataEventArgs.cs" />
     <Compile Include="Matrix\BaseMatrix.cs" />
     <Compile Include="Matrix\DiagonalMatrix.cs" />
+    <Compile Include="Matrix\MatrixExtensions.cs" />
     <Compile Include="Matrix\SymmetricMatrix.cs" />
     <Compile Include="Matrix\SquareMatrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

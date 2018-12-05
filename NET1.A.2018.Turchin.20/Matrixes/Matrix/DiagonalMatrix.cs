@@ -8,11 +8,14 @@ namespace Matrixes.Matrix
 {
     public class DiagonalMatrix<T> : BaseMatrix<T>
     {
+        private T[] matrixArray;
+
         /// <summary>
         /// Constructor without parameters.
         /// </summary>
         public DiagonalMatrix() : base()
         {
+            matrixArray = new T[defaultSize];
         }
 
         /// <summary>
@@ -21,6 +24,7 @@ namespace Matrixes.Matrix
         /// <param name="size">The size of matrix.</param>
         public DiagonalMatrix(int size) : base(size)
         {
+            matrixArray = new T[size];
         }
 
         /// <summary>
@@ -30,30 +34,10 @@ namespace Matrixes.Matrix
         /// <exception cref="InvalidCastException">if array is not diagonal.</exception>
         public DiagonalMatrix(T[,] array)
         {
-            int root = (int)Math.Sqrt(array.Length);
+            CheckArray(array);
 
-            if (array.Length - root * root > 0.01)
-            {
-                throw new ArgumentException(nameof(array));
-            }
-
-            CheckArray(array, root);
-
-            this.Size = root;
-            this.matrixArray = array;
-        }
-
-        /// <summary>
-        /// Sum between one <see cref="DiagonalMatrix{T}"/> with another <see cref="DiagonalMatrix{T}"/>.
-        /// </summary>
-        /// <param name="diagonalA">First <see cref="DiagonalMatrix{T}"/>.</param>
-        /// <param name="diagonalB">Second <see cref="DiagonalMatrix{T}"/>.</param>
-        /// <returns>New <see cref="DiagonalMatrix{T}{T}"/>.</returns>
-        public static DiagonalMatrix<T> operator +(DiagonalMatrix<T> diagonalA, DiagonalMatrix<T> diagonalB)
-        {
-            CheckSize(diagonalA, diagonalB);
-
-            return NewMatrix(diagonalA, diagonalB);
+            this.Size = array.GetLength(0);
+            this.matrixArray = TakeValues(array);
         }
 
         /// <summary>
@@ -64,46 +48,60 @@ namespace Matrixes.Matrix
         /// <param name="j">The number of the row.</param>
         protected override void SetValue(T value, int i, int j)
         {
-            if (i != j)
+            dynamic temp = value;
+
+            if (i == j)
+            {
+                matrixArray[i] = value;
+            }
+            else if (!temp.Equals(default(T)))
             {
                 throw new InvalidOperationException($"Cannot change not diagonal values.");
             }
-
-            matrixArray[i, j] = value;
         }
 
-        private static DiagonalMatrix<T> NewMatrix(BaseMatrix<T> matrixA, BaseMatrix<T> matrixB)
+        /// <summary>
+        /// Method to get value from the matrix.
+        /// </summary>
+        /// <param name="i">Index of the row.</param>
+        /// <param name="j">Index of the column.</param>
+        /// <returns>The value of <see cref="T"/>.</returns>
+        protected override T GetValue(int i, int j)
         {
-            DiagonalMatrix<T> result = new DiagonalMatrix<T>(matrixA.Size);
-
-            for (int i = 0; i < matrixA.Size; i++)
+            if (i == j)
             {
-                    result[i, i] = (dynamic)matrixA[i, i] + (dynamic)matrixB[i, i];
+                return matrixArray[i];
             }
-
-            return result;
+            else
+            {
+                return default(T);
+            }
         }
 
-        private void CheckArray(T[,] array, int length)
+        private void CheckArray(T[,] array)
         {
-            for (int i = 0; i < length; i++)
-            {
-                for (int j = 0; j < length; j++)
+            for (int i = 0; i < array.GetLength(0); i++)
+                for (int j = 0; j < array.GetLength(0); j++)
                 {
                     if ((i != j) && !array[i, j].Equals(default(T)))
                     {
                         throw new ArgumentException(nameof(array));
                     }
                 }
-            }
         }
 
-        private static void CheckSize(BaseMatrix<T> a, BaseMatrix<T> b)
+        private T[] TakeValues(T[,] array)
         {
-            if (a.Size != b.Size)
+            T[] result = new T[array.GetLength(0)];
+
+            for (int i = 0; i < array.Length; i++)
             {
-                throw new InvalidOperationException($"Matrixes have different sizes");
+                result[i] = array[i, i];
             }
+
+            return result;
         }
+
+        
     }
 }
